@@ -3,6 +3,7 @@ package dataLayer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -12,8 +13,8 @@ public class DatabaseAccess {
 	
 	private Connection connection;
 	private Statement statement;
-	
-	 private PreparedStatement preparedStatement;
+	private PreparedStatement preparedStatement;
+	private ResultSet resultSet;
 	
 	private String databaseName = "BankAppDatabase";
 	private String user = "user";
@@ -24,9 +25,6 @@ public class DatabaseAccess {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(
 					"jdbc:mysql://localhost/" + databaseName + "?user=" + user + "&password=" + password);
-			
-			statement = connection.createStatement();
-
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -67,9 +65,36 @@ public class DatabaseAccess {
 	}
 
 	public ArrayList<Customer> getAllCustomersList() {
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("select * from BankAppDatabase.customers");
+			return getAllCustomersListFromResultSet(resultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
+	private ArrayList<Customer> getAllCustomersListFromResultSet(ResultSet resultSet) {
+		ArrayList<Customer> allCustomers = new ArrayList<Customer>();
+		try {
+			while(resultSet.next()) {
+				Long userId = resultSet.getLong("USER_ID");
+				String name = resultSet.getString("NAME");
+				String surname = resultSet.getString("SURNAME");
+				String password = resultSet.getString("PASSWORD");
+				
+				Customer customer = new Customer(userId, name, surname, password, null);
+				// TODO: add address
+				
+				allCustomers.add(customer);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return allCustomers;
+	}
+
 	public void closeConnection() {
 		try {
 			if(connection != null) {
