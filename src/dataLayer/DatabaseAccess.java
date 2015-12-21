@@ -25,6 +25,7 @@ public class DatabaseAccess {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(
 					"jdbc:mysql://localhost/" + databaseName + "?user=" + user + "&password=" + password);
+			statement = connection.createStatement();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -47,7 +48,27 @@ public class DatabaseAccess {
 	}
 
 	public Customer findCustomerById(long customerId) {
-		return null;
+		try {
+			resultSet = statement.executeQuery(
+					"select * from " + databaseName + ".customers where USER_ID=" + customerId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return convertResultSetToCustomerObject(resultSet);
+	}
+
+	private Customer convertResultSetToCustomerObject(ResultSet resultSet) {
+		try {
+			resultSet.next();
+			Long userId = resultSet.getLong("USER_ID");
+			String name = resultSet.getString("NAME");
+			String surname = resultSet.getString("SURNAME");
+			String password = resultSet.getString("PASSWORD");
+			return new Customer(userId, name, surname, password, null);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null; 
 	}
 
 	public void deleteCustomerById(long customerId) {
@@ -66,13 +87,11 @@ public class DatabaseAccess {
 
 	public ArrayList<Customer> getAllCustomersList() {
 		try {
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery("select * from BankAppDatabase.customers");
-			return getAllCustomersListFromResultSet(resultSet);
+			resultSet = statement.executeQuery("select * from " + databaseName + ".customers");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return getAllCustomersListFromResultSet(resultSet);
 	}
 	
 	private ArrayList<Customer> getAllCustomersListFromResultSet(ResultSet resultSet) {
@@ -83,10 +102,8 @@ public class DatabaseAccess {
 				String name = resultSet.getString("NAME");
 				String surname = resultSet.getString("SURNAME");
 				String password = resultSet.getString("PASSWORD");
-				
 				Customer customer = new Customer(userId, name, surname, password, null);
 				// TODO: add address
-				
 				allCustomers.add(customer);
 			}
 		} catch (SQLException e) {
@@ -99,6 +116,12 @@ public class DatabaseAccess {
 		try {
 			if(connection != null) {
 			connection.close();
+			}
+			if(resultSet != null) {
+				resultSet.close();
+			}
+			if(statement != null) {
+				statement.close();
 			}
 		} catch (SQLException e) {
 				e.printStackTrace();
