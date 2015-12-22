@@ -103,8 +103,14 @@ public class DatabaseAccess {
 	}
 	
 	public Customer getCurrentCustomerInformation(Customer customer) {
+		try {
+			resultSet = statement.executeQuery(
+					"SELECT * FROM " + databaseName + ".customers WHERE USER_ID = " + customer.getUserId());
+			return convertResultSetToCustomerObject(resultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
-		//TODO:
 	}
 
 	public ArrayList<Customer> getAllCustomersList() {

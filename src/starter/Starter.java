@@ -18,13 +18,16 @@ public class Starter {
 		View view = new View();
 		
 		CustomerManager customerManager = new CustomerManager(databaseAccess, view);
-		//customerManager.addCustomer(94010112345L, "Tomek", "Majewski", "asd123", "Podgorna", "Zielona Gora", "00-000");
+		customerManager.addCustomer(94010112345L, "Tomek", "Majewski", "asd123", "Podgorna", "Zielona Gora", "00-000");
 		//customerManager.addCustomer(91234512132L, "Marcin", "Kaminski", "ddd333", "Krotka", "Zary", "68-200");
-		//customerManager.deleteCustomerById(94010112345L);
+		Customer customer = customerManager.findCustomerById(94010112345L);
+		System.out.println(customerManager.getCurrentCustomerInformation(customer));
+		customerManager.updateCustomer(new Customer(94010112345L, "111sd", "asd", "asd", new Address("asd", "asd", "asd")));
+		System.out.println(customerManager.getCurrentCustomerInformation(customer));
+		customerManager.deleteCustomerById(94010112345L);
 		//customerManager.deleteCustomerById(91234512132L);
 		//customerManager.printAllCustomersInfo();
-		customerManager.updateCustomer(new Customer(94010112345L, "111sd", "asd", "asd", new Address("asd", "asd", "asd")));
-		customerManager.printCustomerInfoById(94010112345L);
+		//customerManager.printCustomerInfoById(94010112345L);
 		databaseAccess.closeConnection();
 	}	
 

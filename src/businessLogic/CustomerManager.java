@@ -33,6 +33,10 @@ public class CustomerManager {
 		daoCustomer.update(customer);
 	}
 	
+	public Customer getCurrentCustomerInformation(Customer customer) {
+		return daoCustomer.getCurrentCustomerInformation(customer);
+	}
+	
 	public void deleteCustomerById(long customerId) {
 		daoCustomer.delete(customerId);
 	}
