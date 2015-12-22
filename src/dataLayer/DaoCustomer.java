@@ -23,8 +23,12 @@ public class DaoCustomer {
 		databaseAccess.deleteCustomerById(customerId);
 	}
 	
-	public void update() {
-		databaseAccess.updateCustomerInfo();
+	public void update(Customer customer) {
+		databaseAccess.updateCustomerInformation(customer);
+	}
+	
+	public Customer getCurrentCustomerInformation(Customer customer) {
+		return databaseAccess.getCurrentCustomerInformation(customer);
 	}
 	
 	public ArrayList<Customer> getAllCustomersList() {

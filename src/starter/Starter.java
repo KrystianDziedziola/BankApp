@@ -3,6 +3,8 @@ package starter;
 import presentationLayer.View;
 import businessLogic.BankAccountManager;
 import businessLogic.CustomerManager;
+import dataLayer.Address;
+import dataLayer.Customer;
 import dataLayer.DatabaseAccess;
 
 public class Starter {
@@ -21,6 +23,7 @@ public class Starter {
 		//customerManager.deleteCustomerById(94010112345L);
 		//customerManager.deleteCustomerById(91234512132L);
 		//customerManager.printAllCustomersInfo();
+		customerManager.updateCustomer(new Customer(94010112345L, "asd", "asd", "asd", new Address("asd", "asd", "asd")));
 		customerManager.printCustomerInfoById(94010112345L);
 		databaseAccess.closeConnection();
 	}	

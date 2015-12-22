@@ -36,21 +36,32 @@ public class DatabaseAccess {
 	public void create(Customer customer) {
 		try {
 			preparedStatement = connection.prepareStatement(
-					"insert into "+ databaseName + ".customers values (?, ?, ?, ?)");
-			preparedStatement.setLong(1, customer.getUserId());
-			preparedStatement.setString(2, customer.getName());
-			preparedStatement.setString(3, customer.getSurname());
-			preparedStatement.setString(4, customer.getPassword());
-			preparedStatement.executeUpdate();
+					"INSERT INTO "+ databaseName + ".customers VALUES (?, ?, ?, ?)");
+			setCustomerInfo(preparedStatement, customer);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
+	private void setCustomerInfo(PreparedStatement preparedStatement, Customer customer) throws SQLException {
+		preparedStatement = getPreparedStatementWithSettedCustomerInfo(customer, preparedStatement);
+		preparedStatement.executeUpdate();
+	}
+
+	private PreparedStatement getPreparedStatementWithSettedCustomerInfo(
+			Customer customer, PreparedStatement preparedStatement) throws SQLException {
+		preparedStatement.setLong(1, customer.getUserId());
+		preparedStatement.setString(2, customer.getName());
+		preparedStatement.setString(3, customer.getSurname());
+		preparedStatement.setString(4, customer.getPassword());
+		return preparedStatement;
+	}
+
 	public Customer findCustomerById(long customerId) {
 		try {
 			resultSet = statement.executeQuery(
-					"select * from " + databaseName + ".customers where USER_ID=" + customerId);
+					"SELECT * FROM " + databaseName + ".customers WHERE USER_ID = " + customerId);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -74,15 +85,37 @@ public class DatabaseAccess {
 	public void deleteCustomerById(long customerId) {
 		try {
 			preparedStatement = connection.prepareStatement(
-					"delete from " + databaseName + ".customers where USER_ID= " + customerId);
+					"DELETE FROM " + databaseName + ".customers WHERE USER_ID = " + customerId);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void updateCustomerInfo() {
-		
+	public void updateCustomerInformation(Customer customer) {
+		try {
+			/*preparedStatement = connection.prepareStatement(
+					"UPDATE " + databaseName + ".customers SET " + 
+					"USER_ID = " + customer.getUserId() + ", " +
+					"NAME = " + customer.getName() + ", " +
+					"SURNAME = " + customer.getSurname() + ", " +
+					"PASSWORD = " + customer.getPassword() +
+					"WHERE USER_ID = " + customer.getUserId());*/
+			preparedStatement = connection.prepareStatement(
+					"UPDATE " + databaseName + ".customers SET " + 
+					"USER_ID = ?, NAME = ?, SURNAME = ?, PASSWORD = ? WHERE USER_ID = ?");
+			preparedStatement = getPreparedStatementWithSettedCustomerInfo(customer, preparedStatement);
+			final int USER_ID_INDEX = 5;
+			preparedStatement.setLong(USER_ID_INDEX, customer.getUserId());
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Customer getCurrentCustomerInformation(Customer customer) {
+		return null;
+		//TODO:
 	}
 
 	public ArrayList<Customer> getAllCustomersList() {
