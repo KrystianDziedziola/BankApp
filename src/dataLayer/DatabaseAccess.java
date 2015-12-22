@@ -37,8 +37,7 @@ public class DatabaseAccess {
 		try {
 			preparedStatement = connection.prepareStatement(
 					"INSERT INTO "+ databaseName + ".customers VALUES (?, ?, ?, ?)");
-			setCustomerInfo(preparedStatement, customer);
-			
+			setCustomerInfo(preparedStatement, customer);		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -50,7 +49,7 @@ public class DatabaseAccess {
 	}
 
 	private PreparedStatement getPreparedStatementWithSettedCustomerInfo(
-			Customer customer, PreparedStatement preparedStatement) throws SQLException {
+				Customer customer, PreparedStatement preparedStatement) throws SQLException {
 		preparedStatement.setLong(1, customer.getUserId());
 		preparedStatement.setString(2, customer.getName());
 		preparedStatement.setString(3, customer.getSurname());
@@ -94,20 +93,10 @@ public class DatabaseAccess {
 
 	public void updateCustomerInformation(Customer customer) {
 		try {
-			/*preparedStatement = connection.prepareStatement(
-					"UPDATE " + databaseName + ".customers SET " + 
-					"USER_ID = " + customer.getUserId() + ", " +
-					"NAME = " + customer.getName() + ", " +
-					"SURNAME = " + customer.getSurname() + ", " +
-					"PASSWORD = " + customer.getPassword() +
-					"WHERE USER_ID = " + customer.getUserId());*/
 			preparedStatement = connection.prepareStatement(
 					"UPDATE " + databaseName + ".customers SET " + 
-					"USER_ID = ?, NAME = ?, SURNAME = ?, PASSWORD = ? WHERE USER_ID = ?");
-			preparedStatement = getPreparedStatementWithSettedCustomerInfo(customer, preparedStatement);
-			final int USER_ID_INDEX = 5;
-			preparedStatement.setLong(USER_ID_INDEX, customer.getUserId());
-			preparedStatement.executeUpdate();
+					"USER_ID = ?, NAME = ?, SURNAME = ?, PASSWORD = ? WHERE USER_ID = " + customer.getUserId());
+			setCustomerInfo(preparedStatement, customer);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

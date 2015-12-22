@@ -23,7 +23,7 @@ public class Starter {
 		//customerManager.deleteCustomerById(94010112345L);
 		//customerManager.deleteCustomerById(91234512132L);
 		//customerManager.printAllCustomersInfo();
-		customerManager.updateCustomer(new Customer(94010112345L, "asd", "asd", "asd", new Address("asd", "asd", "asd")));
+		customerManager.updateCustomer(new Customer(94010112345L, "111sd", "asd", "asd", new Address("asd", "asd", "asd")));
 		customerManager.printCustomerInfoById(94010112345L);
 		databaseAccess.closeConnection();
 	}	
