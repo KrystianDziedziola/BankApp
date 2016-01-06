@@ -12,7 +12,7 @@ public class DaoCustomer {
 	}
 
 	public void create(Customer customer) {
-		databaseAccess.create(customer);
+		databaseAccess.createCustomer(customer);
 	}
 	
 	public Customer find(long customerId) {

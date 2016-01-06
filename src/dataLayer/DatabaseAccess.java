@@ -33,7 +33,12 @@ public class DatabaseAccess {
 		} 
 	}
 
-	public void create(Customer customer) {
+	public void createCustomer(Customer customer) {
+		saveCustomerInfo(customer);
+		saveCustomerAddress(customer);
+	}
+	
+	private void saveCustomerInfo(Customer customer) {
 		try {
 			preparedStatement = connection.prepareStatement(
 					"INSERT INTO "+ databaseName + ".customers VALUES (?, ?, ?, ?)");
@@ -50,10 +55,37 @@ public class DatabaseAccess {
 
 	private PreparedStatement getPreparedStatementWithSettedCustomerInfo(
 				Customer customer, PreparedStatement preparedStatement) throws SQLException {
-		preparedStatement.setLong(1, customer.getUserId());
-		preparedStatement.setString(2, customer.getName());
-		preparedStatement.setString(3, customer.getSurname());
-		preparedStatement.setString(4, customer.getPassword());
+		int columnNumber = 1;
+		preparedStatement.setLong(columnNumber++, customer.getUserId());
+		preparedStatement.setString(columnNumber++, customer.getName());
+		preparedStatement.setString(columnNumber++, customer.getSurname());
+		preparedStatement.setString(columnNumber++, customer.getPassword());
+		return preparedStatement;
+	}
+	
+	private void saveCustomerAddress(Customer customer) {
+		try {
+			preparedStatement = connection.prepareStatement(
+					"INSERT INTO "+ databaseName + ".addresses VALUES (default, ?, ?, ?, ?)");
+			setAddresInfo(preparedStatement, customer);		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void setAddresInfo(PreparedStatement preparedStatement, Customer customer) throws SQLException {
+		preparedStatement = getPreparedStatementWithSettedAddress(customer, preparedStatement);
+		preparedStatement.executeUpdate();
+	}
+	
+	private PreparedStatement getPreparedStatementWithSettedAddress(
+			Customer customer, PreparedStatement preparedStatement) throws SQLException {
+		Address address = customer.getAddress();
+		int columnNumber = 1;
+		preparedStatement.setString(columnNumber++, address.getStreet());
+		preparedStatement.setString(columnNumber++, address.getCity());
+		preparedStatement.setString(columnNumber++, address.getPostCode());
+		preparedStatement.setLong(columnNumber++, customer.getUserId());
 		return preparedStatement;
 	}
 
@@ -70,10 +102,10 @@ public class DatabaseAccess {
 	private Customer convertResultSetToCustomerObject(ResultSet resultSet) {
 		try {
 			resultSet.next();
-			Long userId = resultSet.getLong("USER_ID");
-			String name = resultSet.getString("NAME");
-			String surname = resultSet.getString("SURNAME");
-			String password = resultSet.getString("PASSWORD");
+			Long userId = resultSet.getLong("user_id");
+			String name = resultSet.getString("name");
+			String surname = resultSet.getString("surname");
+			String password = resultSet.getString("password");
 			return new Customer(userId, name, surname, password, null);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -95,7 +127,7 @@ public class DatabaseAccess {
 		try {
 			preparedStatement = connection.prepareStatement(
 					"UPDATE " + databaseName + ".customers SET " + 
-					"USER_ID = ?, NAME = ?, SURNAME = ?, PASSWORD = ? WHERE USER_ID = " + customer.getUserId());
+					"user_id = ?, name = ?, surname = ?, password = ? WHERE USER_ID = " + customer.getUserId());
 			setCustomerInfo(preparedStatement, customer);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -110,12 +142,13 @@ public class DatabaseAccess {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		//TODO: add address
 		return null;
 	}
 
 	public ArrayList<Customer> getAllCustomersList() {
 		try {
-			resultSet = statement.executeQuery("select * from " + databaseName + ".customers");
+			resultSet = statement.executeQuery("SELECT * FROM " + databaseName + ".customers");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -126,10 +159,10 @@ public class DatabaseAccess {
 		ArrayList<Customer> allCustomers = new ArrayList<Customer>();
 		try {
 			while(resultSet.next()) {
-				Long userId = resultSet.getLong("USER_ID");
-				String name = resultSet.getString("NAME");
-				String surname = resultSet.getString("SURNAME");
-				String password = resultSet.getString("PASSWORD");
+				Long userId = resultSet.getLong("user_id");
+				String name = resultSet.getString("name");
+				String surname = resultSet.getString("surname");
+				String password = resultSet.getString("password");
 				Customer customer = new Customer(userId, name, surname, password, null);
 				// TODO: add address
 				allCustomers.add(customer);
@@ -154,6 +187,20 @@ public class DatabaseAccess {
 		} catch (SQLException e) {
 				e.printStackTrace();
 		}
+	}
+
+	public void createBankAccount(BankAccount bankAccount) {
+		// TODO Auto-generated method stub
+	}
+
+	public BankAccount findBankAccount(long accountNumberToFind) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void deleteBankAccount(long accountNumberToDelete) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

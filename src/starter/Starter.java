@@ -16,17 +16,20 @@ public class Starter {
 	public Starter() {
 		DatabaseAccess databaseAccess = new DatabaseAccess();
 		View view = new View();
-		
 		CustomerManager customerManager = new CustomerManager(databaseAccess, view);
+		BankAccountManager bankAccountManager = new BankAccountManager(databaseAccess, view);
+		
 		customerManager.addCustomer(94010112345L, "Tomek", "Majewski", "asd123", "Podgorna", "Zielona Gora", "00-000");
-		//customerManager.addCustomer(91234512132L, "Marcin", "Kaminski", "ddd333", "Krotka", "Zary", "68-200");
+		//bankAccountManager.createBankAccount(94010112345L, 11111111111L, 1000);
+		
+		/*customerManager.addCustomer(91234512132L, "Marcin", "Kaminski", "ddd333", "Krotka", "Zary", "68-200");
 		Customer customer = customerManager.findCustomerById(94010112345L);
 		System.out.println(customerManager.getCurrentCustomerInformation(customer));
 		customerManager.updateCustomer(new Customer(94010112345L, "111sd", "asd", "asd", new Address("asd", "asd", "asd")));
-		System.out.println(customerManager.getCurrentCustomerInformation(customer));
-		customerManager.deleteCustomerById(94010112345L);
+		System.out.println(customerManager.getCurrentCustomerInformation(customer));*/
+		customerManager.printAllCustomersInfo();
+		//customerManager.deleteCustomerById(94010112345L);
 		//customerManager.deleteCustomerById(91234512132L);
-		//customerManager.printAllCustomersInfo();
 		//customerManager.printCustomerInfoById(94010112345L);
 		databaseAccess.closeConnection();
 	}	

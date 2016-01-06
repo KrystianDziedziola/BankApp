@@ -4,19 +4,21 @@ import presentationLayer.View;
 import dataLayer.BankAccount;
 import dataLayer.Customer;
 import dataLayer.DaoBankAccount;
+import dataLayer.DatabaseAccess;
 
 public class BankAccountManager {
 
 	private View view;
 	
-	private DaoBankAccount daoBankAccount = new DaoBankAccount();
+	private DaoBankAccount daoBankAccount;
 	
-	public BankAccountManager(View view) {
+	public BankAccountManager(DatabaseAccess databaseAccess, View view) {
+		daoBankAccount= new DaoBankAccount(databaseAccess);
 		this.view = view;
 	}
 
-	public void createBankAccount(Customer customer, long accountNumber, int startingBalance) {
-		BankAccount bankAccount = new BankAccount(accountNumber, startingBalance, customer.getUserId());
+	public void createBankAccount(long userId, long accountNumber, int startingBalance) {
+		BankAccount bankAccount = new BankAccount(accountNumber, startingBalance, userId);
 		daoBankAccount.create(bankAccount);
 	}
 
