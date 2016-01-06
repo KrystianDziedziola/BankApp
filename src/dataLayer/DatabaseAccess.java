@@ -67,13 +67,13 @@ public class DatabaseAccess {
 		try {
 			preparedStatement = connection.prepareStatement(
 					"INSERT INTO "+ databaseName + ".addresses VALUES (default, ?, ?, ?, ?)");
-			setAddresInfo(preparedStatement, customer);		
+			setAddressInfo(preparedStatement, customer);		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void setAddresInfo(PreparedStatement preparedStatement, Customer customer) throws SQLException {
+	private void setAddressInfo(PreparedStatement preparedStatement, Customer customer) throws SQLException {
 		preparedStatement = getPreparedStatementWithSettedAddress(customer, preparedStatement);
 		preparedStatement.executeUpdate();
 	}
@@ -90,9 +90,16 @@ public class DatabaseAccess {
 	}
 
 	public Customer findCustomerById(long customerId) {
+		Customer customer = getCustomer(customerId);
+		Address address = getAddress(customerId);
+		customer.setAddress(address);
+		return customer;
+	}
+
+	private Customer getCustomer(long customerId) {
 		try {
 			resultSet = statement.executeQuery(
-					"SELECT * FROM " + databaseName + ".customers WHERE USER_ID = " + customerId);
+					"SELECT * FROM " + databaseName + ".customers WHERE user_id = " + customerId);	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -112,6 +119,29 @@ public class DatabaseAccess {
 		}
 		return null; 
 	}
+	
+	private Address getAddress(long customerId) {
+		try {
+			resultSet = statement.executeQuery(
+					"SELECT * FROM " + databaseName + ".addresses WHERE user_id = " + customerId);	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return convertResultSetToAddressObject(resultSet);
+	}
+
+	private Address convertResultSetToAddressObject(ResultSet resultSet) {
+		try {
+			resultSet.next();
+			String street = resultSet.getString("street");
+			String city = resultSet.getString("city");
+			String postcode = resultSet.getString("postcode");
+			return new Address(street, city, postcode);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public void deleteCustomerById(long customerId) {
 		try {
@@ -125,46 +155,59 @@ public class DatabaseAccess {
 
 	public void updateCustomerInformation(Customer customer) {
 		try {
-			preparedStatement = connection.prepareStatement(
-					"UPDATE " + databaseName + ".customers SET " + 
-					"user_id = ?, name = ?, surname = ?, password = ? WHERE USER_ID = " + customer.getUserId());
-			setCustomerInfo(preparedStatement, customer);
+			updateCustomer(customer);
+			updateAddress(customer);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void updateCustomer(Customer customer) throws SQLException {
+		preparedStatement = connection.prepareStatement(
+				"UPDATE " + databaseName + ".customers SET " + 
+				"user_id = ?, name = ?, surname = ?, password = ? WHERE USER_ID = " + customer.getUserId());
+		setCustomerInfo(preparedStatement, customer);
+	}
+	
+	private void updateAddress(Customer customer) throws SQLException {
+		preparedStatement = connection.prepareStatement(
+				"UPDATE " + databaseName + ".addresses SET " + 
+				"id = default, street = ?, city = ?, postcode = ?, user_id = ? WHERE USER_ID = " + customer.getUserId());
+		setAddressInfo(preparedStatement, customer);
 	}
 	
 	public Customer getCurrentCustomerInformation(Customer customer) {
-		try {
-			resultSet = statement.executeQuery(
-					"SELECT * FROM " + databaseName + ".customers WHERE USER_ID = " + customer.getUserId());
-			return convertResultSetToCustomerObject(resultSet);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		//TODO: add address
-		return null;
+		return findCustomerById(customer.getUserId());
 	}
 
+	//TODO: not working correctly
 	public ArrayList<Customer> getAllCustomersList() {
 		try {
-			resultSet = statement.executeQuery("SELECT * FROM " + databaseName + ".customers");
+			ResultSet customersResultSet = statement.executeQuery("SELECT * FROM " + databaseName + ".customers");
+			ResultSet addressesResultSet = statement.executeQuery("SELECT * FROM " + databaseName + ".addresses");
+			return getAllCustomersListFromResultSets(customersResultSet, addressesResultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return getAllCustomersListFromResultSet(resultSet);
+		return null;
 	}
 	
-	private ArrayList<Customer> getAllCustomersListFromResultSet(ResultSet resultSet) {
+	private ArrayList<Customer> getAllCustomersListFromResultSets(
+			ResultSet customersResultSet, ResultSet addressesResultSet) {
 		ArrayList<Customer> allCustomers = new ArrayList<Customer>();
 		try {
-			while(resultSet.next()) {
-				Long userId = resultSet.getLong("user_id");
-				String name = resultSet.getString("name");
-				String surname = resultSet.getString("surname");
-				String password = resultSet.getString("password");
+			while(customersResultSet.next() || addressesResultSet.next()) {
+				Long userId = customersResultSet.getLong("user_id");
+				String name = customersResultSet.getString("name");
+				String surname = customersResultSet.getString("surname");
+				String password = customersResultSet.getString("password");
 				Customer customer = new Customer(userId, name, surname, password, null);
-				// TODO: add address
+				
+				String street = addressesResultSet.getString("street");
+				String city = addressesResultSet.getString("city");
+				String postcode = addressesResultSet.getString("postcode");
+				Address address = new Address(street, city, postcode);
+				customer.setAddress(address);
 				allCustomers.add(customer);
 			}
 		} catch (SQLException e) {
@@ -200,7 +243,6 @@ public class DatabaseAccess {
 
 	public void deleteBankAccount(long accountNumberToDelete) {
 		// TODO Auto-generated method stub
-		
 	}
 
 }
