@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 
-public class DatabaseAccess {
+public class DatabaseDao implements DaoInterface {
 	
 	private Connection connection;
 	private Statement statement;
@@ -36,6 +36,77 @@ public class DatabaseAccess {
 	public void createCustomer(Customer customer) {
 		saveCustomerInfo(customer);
 		saveCustomerAddress(customer);
+	}
+	
+	public Customer findCustomerById(long customerId) {
+		Customer customer = getCustomer(customerId);
+		Address address = getAddress(customerId);
+		customer.setAddress(address);
+		return customer;
+	}
+	
+	public void deleteCustomerById(long customerId) {
+		try {
+			preparedStatement = connection.prepareStatement(
+					"DELETE FROM " + databaseName + ".customers WHERE USER_ID = " + customerId);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateCustomerInformation(Customer customer) {
+		try {
+			updateCustomer(customer);
+			updateAddress(customer);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Customer getCurrentCustomerInformation(Customer customer) {
+		return findCustomerById(customer.getUserId());
+	}
+
+	//TODO: not working correctly
+	public ArrayList<Customer> getAllCustomersList() {
+		try {
+			ResultSet customersResultSet = statement.executeQuery("SELECT * FROM " + databaseName + ".customers");
+			ResultSet addressesResultSet = statement.executeQuery("SELECT * FROM " + databaseName + ".addresses");
+			return getAllCustomersListFromResultSets(customersResultSet, addressesResultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public void closeConnection() {
+		try {
+			if(connection != null) {
+			connection.close();
+			}
+			if(resultSet != null) {
+				resultSet.close();
+			}
+			if(statement != null) {
+				statement.close();
+			}
+		} catch (SQLException e) {
+				e.printStackTrace();
+		}
+	}
+
+	public void createBankAccount(BankAccount bankAccount) {
+		// TODO Auto-generated method stub
+	}
+
+	public BankAccount findBankAccount(long accountNumberToFind) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void deleteBankAccount(long accountNumberToDelete) {
+		// TODO Auto-generated method stub
 	}
 	
 	private void saveCustomerInfo(Customer customer) {
@@ -89,13 +160,6 @@ public class DatabaseAccess {
 		return preparedStatement;
 	}
 
-	public Customer findCustomerById(long customerId) {
-		Customer customer = getCustomer(customerId);
-		Address address = getAddress(customerId);
-		customer.setAddress(address);
-		return customer;
-	}
-
 	private Customer getCustomer(long customerId) {
 		try {
 			resultSet = statement.executeQuery(
@@ -142,25 +206,6 @@ public class DatabaseAccess {
 		}
 		return null;
 	}
-
-	public void deleteCustomerById(long customerId) {
-		try {
-			preparedStatement = connection.prepareStatement(
-					"DELETE FROM " + databaseName + ".customers WHERE USER_ID = " + customerId);
-			preparedStatement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void updateCustomerInformation(Customer customer) {
-		try {
-			updateCustomer(customer);
-			updateAddress(customer);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	private void updateCustomer(Customer customer) throws SQLException {
 		preparedStatement = connection.prepareStatement(
@@ -174,22 +219,6 @@ public class DatabaseAccess {
 				"UPDATE " + databaseName + ".addresses SET " + 
 				"id = default, street = ?, city = ?, postcode = ?, user_id = ? WHERE USER_ID = " + customer.getUserId());
 		setAddressInfo(preparedStatement, customer);
-	}
-	
-	public Customer getCurrentCustomerInformation(Customer customer) {
-		return findCustomerById(customer.getUserId());
-	}
-
-	//TODO: not working correctly
-	public ArrayList<Customer> getAllCustomersList() {
-		try {
-			ResultSet customersResultSet = statement.executeQuery("SELECT * FROM " + databaseName + ".customers");
-			ResultSet addressesResultSet = statement.executeQuery("SELECT * FROM " + databaseName + ".addresses");
-			return getAllCustomersListFromResultSets(customersResultSet, addressesResultSet);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	private ArrayList<Customer> getAllCustomersListFromResultSets(
@@ -214,35 +243,6 @@ public class DatabaseAccess {
 			e.printStackTrace();
 		}
 		return allCustomers;
-	}
-
-	public void closeConnection() {
-		try {
-			if(connection != null) {
-			connection.close();
-			}
-			if(resultSet != null) {
-				resultSet.close();
-			}
-			if(statement != null) {
-				statement.close();
-			}
-		} catch (SQLException e) {
-				e.printStackTrace();
-		}
-	}
-
-	public void createBankAccount(BankAccount bankAccount) {
-		// TODO Auto-generated method stub
-	}
-
-	public BankAccount findBankAccount(long accountNumberToFind) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void deleteBankAccount(long accountNumberToDelete) {
-		// TODO Auto-generated method stub
 	}
 
 }

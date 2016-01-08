@@ -3,17 +3,18 @@ package businessLogic;
 import presentationLayer.View;
 import dataLayer.BankAccount;
 import dataLayer.Customer;
-import dataLayer.DaoBankAccount;
-import dataLayer.DatabaseAccess;
+import dataLayer.BankAccountDaoFactory;
+import dataLayer.DaoInterface;
+import dataLayer.DatabaseDao;
 
 public class BankAccountManager {
 
 	private View view;
 	
-	private DaoBankAccount daoBankAccount;
+	private BankAccountDaoFactory daoBankAccount;
 	
-	public BankAccountManager(DatabaseAccess databaseAccess, View view) {
-		daoBankAccount= new DaoBankAccount(databaseAccess);
+	public BankAccountManager(DaoInterface dao, View view) {
+		daoBankAccount= new BankAccountDaoFactory(dao);
 		this.view = view;
 	}
 

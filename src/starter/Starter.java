@@ -5,7 +5,9 @@ import businessLogic.BankAccountManager;
 import businessLogic.CustomerManager;
 import dataLayer.Address;
 import dataLayer.Customer;
-import dataLayer.DatabaseAccess;
+import dataLayer.DaoInterface;
+import dataLayer.DatabaseDao;
+import dataLayer.XmlDao;
 
 public class Starter {
 
@@ -14,10 +16,12 @@ public class Starter {
 	}
 	
 	public Starter() {
-		DatabaseAccess databaseAccess = new DatabaseAccess();
+		DaoInterface dao = new XmlDao();		//move to customer and bankAccount manager
+//		DaoInterface dao = new DatabaseDao();
+		
 		View view = new View();
-		CustomerManager customerManager = new CustomerManager(databaseAccess, view);
-//		BankAccountManager bankAccountManager = new BankAccountManager(databaseAccess, view);
+		CustomerManager customerManager = new CustomerManager(dao, view);
+//		BankAccountManager bankAccountManager = new BankAccountManager(dao, view);
 		
 		customerManager.addCustomer(94010112345L, "Tomek", "Majewski", "asd123", "Podgorna", "Zielona Gora", "00-000");
 		//bankAccountManager.createBankAccount(94010112345L, 11111111111L, 1000);
@@ -33,7 +37,7 @@ public class Starter {
 		customerManager.deleteCustomerById(94010112345L);
 		//customerManager.deleteCustomerById(91234512132L);
 		
-		databaseAccess.closeConnection();
+		dao.closeConnection();
 	}	
 
 }
