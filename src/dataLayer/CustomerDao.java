@@ -2,11 +2,11 @@ package dataLayer;
 
 import java.util.ArrayList;
 
-public class CustomerDaoFactory {
+public class CustomerDao {
 
 	DaoInterface dao;
 	
-	public CustomerDaoFactory(DaoInterface dao) {
+	public CustomerDao(DaoInterface dao) {
 		this.dao = dao; 
 		dao.connect();
 	}

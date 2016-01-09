@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import presentationLayer.View;
 import dataLayer.Address;
 import dataLayer.Customer;
-import dataLayer.CustomerDaoFactory;
+import dataLayer.CustomerDao;
 import dataLayer.DaoInterface;
 
 public class CustomerManager {
 
-	private CustomerDaoFactory daoCustomer;
+	private CustomerDao daoCustomer;
 	private View view;
 	
 	public CustomerManager(DaoInterface dao, View view) {
-		daoCustomer = new CustomerDaoFactory(dao);
+		daoCustomer = new CustomerDao(dao);
 		this.view = view;
 	}
 

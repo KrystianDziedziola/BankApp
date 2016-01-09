@@ -3,7 +3,7 @@ package businessLogic;
 import presentationLayer.View;
 import dataLayer.BankAccount;
 import dataLayer.Customer;
-import dataLayer.BankAccountDaoFactory;
+import dataLayer.BankAccountDao;
 import dataLayer.DaoInterface;
 import dataLayer.DatabaseDao;
 
@@ -11,10 +11,10 @@ public class BankAccountManager {
 
 	private View view;
 	
-	private BankAccountDaoFactory daoBankAccount;
+	private BankAccountDao daoBankAccount;
 	
 	public BankAccountManager(DaoInterface dao, View view) {
-		daoBankAccount= new BankAccountDaoFactory(dao);
+		daoBankAccount= new BankAccountDao(dao);
 		this.view = view;
 	}
 

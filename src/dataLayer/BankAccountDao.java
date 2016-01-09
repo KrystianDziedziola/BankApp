@@ -1,10 +1,10 @@
 package dataLayer;
 
-public class BankAccountDaoFactory {
+public class BankAccountDao {
 
 	DaoInterface dao;
 	
-	public BankAccountDaoFactory(DaoInterface dao) {
+	public BankAccountDao(DaoInterface dao) {
 		this.dao = dao;
 	}
 	
