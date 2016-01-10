@@ -16,8 +16,8 @@ public class Starter {
 	}
 	
 	public Starter() {
-		DaoInterface dao = new XmlDao();		//move to customer and bankAccount manager
-//		DaoInterface dao = new DatabaseDao();
+//		DaoInterface dao = new XmlDao();
+		DaoInterface dao = new DatabaseDao();
 		
 		View view = new View();
 		CustomerManager customerManager = new CustomerManager(dao, view);
