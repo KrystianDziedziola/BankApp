@@ -2,33 +2,31 @@ package businessLogic;
 
 import presentationLayer.View;
 import dataLayer.BankAccount;
-import dataLayer.Customer;
-import dataLayer.BankAccountDao;
-import dataLayer.DaoInterface;
-import dataLayer.DatabaseDao;
+import dataLayer.dao.BankAccountDaoInterface;
+import dataLayer.dao.BankAccountMySqlDao;
 
 public class BankAccountManager {
 
 	private View view;
 	
-	private BankAccountDao daoBankAccount;
+	private BankAccountDaoInterface bankAccountDao;
 	
-	public BankAccountManager(DaoInterface dao, View view) {
-		daoBankAccount= new BankAccountDao(dao);
+	public BankAccountManager(View view) {
+		bankAccountDao= new BankAccountMySqlDao();
 		this.view = view;
 	}
 
 	public void createBankAccount(long userId, long accountNumber, int startingBalance) {
 		BankAccount bankAccount = new BankAccount(accountNumber, startingBalance, userId);
-		daoBankAccount.create(bankAccount);
+		bankAccountDao.create(bankAccount);
 	}
 
 	public BankAccount findBankAccountByAccountNumber(long accountNumberToFind) {
-		return daoBankAccount.find(accountNumberToFind);
+		return bankAccountDao.find(accountNumberToFind);
 	}
 	
 	public void deleteBankAccountByAccountNumber(long accountNumberToDelete) {
-		daoBankAccount.delete(accountNumberToDelete);
+		bankAccountDao.delete(accountNumberToDelete);
 	}
 	
 	public void transferFunds(BankAccount from, BankAccount to, long amount) throws Exception {

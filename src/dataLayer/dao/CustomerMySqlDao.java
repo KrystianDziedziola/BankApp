@@ -1,4 +1,4 @@
-package dataLayer;
+package dataLayer.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,8 +8,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import dataLayer.Address;
+import dataLayer.Customer;
 
-public class DatabaseDao implements DaoInterface {
+public class CustomerMySqlDao implements CustomerDaoInterface {
 	
 	private Connection connection;
 	private Statement statement;
@@ -33,19 +35,19 @@ public class DatabaseDao implements DaoInterface {
 		} 
 	}
 
-	public void createCustomer(Customer customer) {
+	public void create(Customer customer) {
 		saveCustomerInfo(customer);
 		saveCustomerAddress(customer);
 	}
-	
-	public Customer findCustomerById(long customerId) {
+
+	public Customer find(long customerId) {
 		Customer customer = getCustomer(customerId);
 		Address address = getAddress(customerId);
 		customer.setAddress(address);
 		return customer;
 	}
-	
-	public void deleteCustomerById(long customerId) {
+
+	public void delete(long customerId) {
 		try {
 			preparedStatement = connection.prepareStatement(
 					"DELETE FROM " + databaseName + ".customers WHERE USER_ID = " + customerId);
@@ -54,8 +56,8 @@ public class DatabaseDao implements DaoInterface {
 			e.printStackTrace();
 		}
 	}
-	
-	public void updateCustomerInformation(Customer customer) {
+
+	public void update(Customer customer) {
 		try {
 			updateCustomer(customer);
 			updateAddress(customer);
@@ -63,23 +65,27 @@ public class DatabaseDao implements DaoInterface {
 			e.printStackTrace();
 		}
 	}
-	
-	public Customer getCurrentCustomerInformation(Customer customer) {
-		return findCustomerById(customer.getUserId());
+
+	public Customer getCurrentInformation(Customer customer) {
+		return find(customer.getUserId());
 	}
 
-	//TODO: not working correctly
+	//FIXME:returns only one, last customer
 	public ArrayList<Customer> getAllCustomersList() {
 		try {
-			ResultSet customersResultSet = statement.executeQuery("SELECT * FROM " + databaseName + ".customers");
-			ResultSet addressesResultSet = statement.executeQuery("SELECT * FROM " + databaseName + ".addresses");
-			return getAllCustomersListFromResultSets(customersResultSet, addressesResultSet);
+			ArrayList<Customer> allCustomersList = new ArrayList<Customer>();
+			resultSet = statement.executeQuery("SELECT * FROM " + databaseName + ".customers");
+			while(resultSet.next()) {
+				Long userId = resultSet.getLong("user_id");
+				allCustomersList.add(find(userId));
+			}
+			return allCustomersList;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	public void closeConnection() {
 		try {
 			if(connection != null) {
@@ -94,19 +100,6 @@ public class DatabaseDao implements DaoInterface {
 		} catch (SQLException e) {
 				e.printStackTrace();
 		}
-	}
-
-	public void createBankAccount(BankAccount bankAccount) {
-		// TODO Auto-generated method stub
-	}
-
-	public BankAccount findBankAccount(long accountNumberToFind) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void deleteBankAccount(long accountNumberToDelete) {
-		// TODO Auto-generated method stub
 	}
 	
 	private void saveCustomerInfo(Customer customer) {
@@ -221,28 +214,4 @@ public class DatabaseDao implements DaoInterface {
 		setAddressInfo(preparedStatement, customer);
 	}
 	
-	private ArrayList<Customer> getAllCustomersListFromResultSets(
-			ResultSet customersResultSet, ResultSet addressesResultSet) {
-		ArrayList<Customer> allCustomers = new ArrayList<Customer>();
-		try {
-			while(customersResultSet.next() || addressesResultSet.next()) {
-				Long userId = customersResultSet.getLong("user_id");
-				String name = customersResultSet.getString("name");
-				String surname = customersResultSet.getString("surname");
-				String password = customersResultSet.getString("password");
-				Customer customer = new Customer(userId, name, surname, password, null);
-				
-				String street = addressesResultSet.getString("street");
-				String city = addressesResultSet.getString("city");
-				String postcode = addressesResultSet.getString("postcode");
-				Address address = new Address(street, city, postcode);
-				customer.setAddress(address);
-				allCustomers.add(customer);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return allCustomers;
-	}
-
 }
