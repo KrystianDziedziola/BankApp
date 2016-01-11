@@ -2,8 +2,9 @@ package businessLogic;
 
 import presentationLayer.View;
 import dataLayer.BankAccount;
-import dataLayer.dao.BankAccountDaoInterface;
-import dataLayer.dao.BankAccountMySqlDao;
+import dataLayer.dao.bankAccount.BankAccountDaoInterface;
+import dataLayer.dao.bankAccount.BankAccountMySqlDao;
+import dataLayer.dao.bankAccount.BankAccountXmlDao;
 
 public class BankAccountManager {
 
@@ -12,21 +13,50 @@ public class BankAccountManager {
 	private BankAccountDaoInterface bankAccountDao;
 	
 	public BankAccountManager(View view) {
-		bankAccountDao= new BankAccountMySqlDao();
 		this.view = view;
 	}
-
-	public void createBankAccount(long userId, long accountNumber, int startingBalance) {
-		BankAccount bankAccount = new BankAccount(accountNumber, startingBalance, userId);
-		bankAccountDao.create(bankAccount);
-	}
-
-	public BankAccount findBankAccountByAccountNumber(long accountNumberToFind) {
-		return bankAccountDao.find(accountNumberToFind);
+	
+	public void setDaoToMySql() {
+		bankAccountDao = new BankAccountMySqlDao();
 	}
 	
-	public void deleteBankAccountByAccountNumber(long accountNumberToDelete) {
-		bankAccountDao.delete(accountNumberToDelete);
+	public void setDaoToXml() {
+		bankAccountDao = new BankAccountXmlDao();
+	}
+	
+	public void connect() throws Exception {
+		if(bankAccountDao == null) {
+			throw new Exception("No dao type selected");
+		} else {
+			bankAccountDao.connect();
+		}
+	}
+
+	public void create(long accountNumber, int startingBalance, long userId) {
+		BankAccount bankAccount = new BankAccount(accountNumber, startingBalance, userId);
+		bankAccountDao.create(bankAccount, userId);
+	}
+
+	public BankAccount find(long accountNumber) {
+		return bankAccountDao.find(accountNumber);
+	}
+	
+	public void delete(long accountNumber) {
+		bankAccountDao.delete(accountNumber);
+	}
+	
+	public BankAccount getCurrentInformation(long accountNumber) {
+		return bankAccountDao.find(accountNumber);
+	}
+	
+	public void update(BankAccount bankAccount) {
+		bankAccountDao.update(bankAccount);
+	}
+	
+	
+	
+	public void closeConnection() {
+		bankAccountDao.closeConnection();
 	}
 	
 	public void transferFunds(BankAccount from, BankAccount to, long amount) throws Exception {

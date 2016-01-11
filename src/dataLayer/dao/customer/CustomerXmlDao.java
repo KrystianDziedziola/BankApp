@@ -1,14 +1,11 @@
-package dataLayer.dao;
+package dataLayer.dao.customer;
 
 import java.util.ArrayList;
 
 import dataLayer.Customer;
+import dataLayer.dao.XmlDao;
 
-public class CustomerXmlDao implements CustomerDaoInterface {
-
-	public void connect() {
-		System.out.println("connect");
-	}
+public class CustomerXmlDao extends XmlDao implements CustomerDaoInterface {
 
 	public void create(Customer customer) {
 		System.out.println("create");		
@@ -35,10 +32,6 @@ public class CustomerXmlDao implements CustomerDaoInterface {
 	public ArrayList<Customer> getAllCustomersList() {
 		System.out.println("getAllCustomersList");
 		return null;
-	}
-
-	public void closeConnection() {
-		System.out.println("closeConnection");
 	}
 
 }

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import presentationLayer.View;
 import dataLayer.Address;
 import dataLayer.Customer;
-import dataLayer.dao.CustomerDaoInterface;
-import dataLayer.dao.CustomerMySqlDao;
-import dataLayer.dao.CustomerXmlDao;
+import dataLayer.dao.customer.CustomerDaoInterface;
+import dataLayer.dao.customer.CustomerMySqlDao;
+import dataLayer.dao.customer.CustomerXmlDao;
 
 public class CustomerManager {
 
@@ -15,13 +15,23 @@ public class CustomerManager {
 	private View view;
 	
 	public CustomerManager(View view) {
-		customerDao = new CustomerMySqlDao();
-//		customerDao = new XmlCustomerDao();
 		this.view = view;
 	}
 	
-	public void connect() {
-		customerDao.connect();
+	public void setDaoToMySql() {
+		customerDao = new CustomerMySqlDao();
+	}
+	
+	public void setDaoToXml() {
+		customerDao = new CustomerXmlDao();
+	}
+	
+	public void connect() throws Exception {
+		if(customerDao == null) {
+			throw new Exception("No dao type selected");
+		} else {
+			customerDao.connect();
+		}
 	}
 
 	public void addCustomer(long userId, String name, String surname, String password,

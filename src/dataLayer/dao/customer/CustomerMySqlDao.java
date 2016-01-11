@@ -1,39 +1,15 @@
-package dataLayer.dao;
+package dataLayer.dao.customer;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 import dataLayer.Address;
 import dataLayer.Customer;
+import dataLayer.dao.MySqlDao;
 
-public class CustomerMySqlDao implements CustomerDaoInterface {
-	
-	private Connection connection;
-	private Statement statement;
-	private PreparedStatement preparedStatement;
-	private ResultSet resultSet;
-	
-	private String databaseName = "BankAppDatabase";
-	private String user = "user";
-	private String password = "logitech1";
-	
-	public void connect() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost/" + databaseName + "?user=" + user + "&password=" + password);
-			statement = connection.createStatement();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
-	}
+public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 
 	public void create(Customer customer) {
 		saveCustomerInfo(customer);
@@ -50,7 +26,7 @@ public class CustomerMySqlDao implements CustomerDaoInterface {
 	public void delete(long customerId) {
 		try {
 			preparedStatement = connection.prepareStatement(
-					"DELETE FROM " + databaseName + ".customers WHERE USER_ID = " + customerId);
+					"DELETE FROM " + databaseName + ".customers WHERE user_id = " + customerId);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -85,22 +61,6 @@ public class CustomerMySqlDao implements CustomerDaoInterface {
 		}
 		return null;
 	}
-
-	public void closeConnection() {
-		try {
-			if(connection != null) {
-			connection.close();
-			}
-			if(resultSet != null) {
-				resultSet.close();
-			}
-			if(statement != null) {
-				statement.close();
-			}
-		} catch (SQLException e) {
-				e.printStackTrace();
-		}
-	}
 	
 	private void saveCustomerInfo(Customer customer) {
 		try {
@@ -130,7 +90,7 @@ public class CustomerMySqlDao implements CustomerDaoInterface {
 	private void saveCustomerAddress(Customer customer) {
 		try {
 			preparedStatement = connection.prepareStatement(
-					"INSERT INTO "+ databaseName + ".addresses VALUES (default, ?, ?, ?, ?)");
+					"INSERT INTO "+ databaseName + ".addresses VALUES (?, ?, ?, ?)");
 			setAddressInfo(preparedStatement, customer);		
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -210,7 +170,7 @@ public class CustomerMySqlDao implements CustomerDaoInterface {
 	private void updateAddress(Customer customer) throws SQLException {
 		preparedStatement = connection.prepareStatement(
 				"UPDATE " + databaseName + ".addresses SET " + 
-				"id = default, street = ?, city = ?, postcode = ?, user_id = ? WHERE USER_ID = " + customer.getUserId());
+				"id = default, street = ?, city = ?, postcode = ?, user_id = ? WHERE user_id = " + customer.getUserId());
 		setAddressInfo(preparedStatement, customer);
 	}
 	
