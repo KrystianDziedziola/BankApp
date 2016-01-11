@@ -9,5 +9,4 @@ public interface BankAccountDaoInterface {
 	public void delete(long accountNumber);
 	public void update(BankAccount bankAccount);
 	public void closeConnection();
-	
 }

@@ -53,8 +53,6 @@ public class BankAccountManager {
 		bankAccountDao.update(bankAccount);
 	}
 	
-	
-	
 	public void closeConnection() {
 		bankAccountDao.closeConnection();
 	}
@@ -63,6 +61,8 @@ public class BankAccountManager {
 		if(amount <= from.getBalance()) {
 			from.withdraw(amount);
 			to.deposit(amount);
+			bankAccountDao.update(from);
+			bankAccountDao.update(to);
 		} else {
 			throw new Exception("Not enough money for transfer");
 		}
