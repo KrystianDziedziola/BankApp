@@ -30,11 +30,14 @@ public class Starter {
 			bankAccountManager.update(new BankAccount(111111111112L, 2000, 94010112345L));
 			bankAccountManager.printBankAccountInformation(bankAccountManager.find(111111111112L));
 			bankAccountManager.create(222222222222L, 0, 91234512132L);
+			bankAccountManager.deposit(bankAccountManager.find(111111111112L), 50);
 			bankAccountManager.printBankAccountInformation(bankAccountManager.find(222222222222L));
 			bankAccountManager.transferFunds(
 					bankAccountManager.find(111111111112L),
 					bankAccountManager.find(222222222222L), 1000L);
 			bankAccountManager.printBankAccountInformation(bankAccountManager.find(111111111112L));
+			bankAccountManager.printBankAccountInformation(bankAccountManager.find(222222222222L));
+			bankAccountManager.withdraw(bankAccountManager.find(222222222222L), 100);
 			bankAccountManager.printBankAccountInformation(bankAccountManager.find(222222222222L));
 			bankAccountManager.delete(111111111112L);
 			bankAccountManager.delete(222222222222L);
