@@ -1,5 +1,6 @@
 package starter;
 
+import presentationLayer.LoginWindow;
 import presentationLayer.View;
 import businessLogic.BankAccountManager;
 import businessLogic.CustomerManager;
@@ -15,7 +16,7 @@ public class Starter {
 	public Starter() {		
 		try {
 			View view = new View();
-			CustomerManager customerManager = new CustomerManager(view);
+			/*CustomerManager customerManager = new CustomerManager(view);
 			customerManager.setDaoToMySql();
 			customerManager.connect();
 			
@@ -55,7 +56,9 @@ public class Starter {
 			customerManager.deleteCustomerById(94010112345L);
 			customerManager.deleteCustomerById(91234512132L);
 			
-			customerManager.closeConnection();
+			customerManager.closeConnection();*/
+			
+			new LoginWindow().show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
