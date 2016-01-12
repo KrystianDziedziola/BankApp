@@ -1,9 +1,10 @@
 package starter;
 
 import presentationLayer.LoginWindow;
-import presentationLayer.View;
+import presentationLayer.ConsoleView;
 import businessLogic.BankAccountManager;
 import businessLogic.CustomerManager;
+import businessLogic.LoginWindowManager;
 import dataLayer.BankAccount;
 import dataLayer.Customer;
 
@@ -15,8 +16,8 @@ public class Starter {
 	
 	public Starter() {		
 		try {
-			View view = new View();
-			/*CustomerManager customerManager = new CustomerManager(view);
+			/*View view = new View();
+			CustomerManager customerManager = new CustomerManager(view);
 			customerManager.setDaoToMySql();
 			customerManager.connect();
 			
@@ -58,7 +59,8 @@ public class Starter {
 			
 			customerManager.closeConnection();*/
 			
-			new LoginWindow().show();
+			new LoginWindowManager().show();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

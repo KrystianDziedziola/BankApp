@@ -2,7 +2,7 @@ package businessLogic;
 
 import java.util.ArrayList;
 
-import presentationLayer.View;
+import presentationLayer.ConsoleView;
 import dataLayer.Address;
 import dataLayer.Customer;
 import dataLayer.dao.customer.CustomerDaoInterface;
@@ -12,9 +12,9 @@ import dataLayer.dao.customer.CustomerXmlDao;
 public class CustomerManager {
 
 	private CustomerDaoInterface customerDao;
-	private View view;
+	private ConsoleView view;
 	
-	public CustomerManager(View view) {
+	public CustomerManager(ConsoleView view) {
 		this.view = view;
 	}
 	

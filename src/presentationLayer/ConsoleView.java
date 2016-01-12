@@ -3,7 +3,7 @@ package presentationLayer;
 import dataLayer.BankAccount;
 import dataLayer.Customer;
 
-public class View {
+public class ConsoleView {
 	
 	public void printCustomerInformation(Customer customer) {
 		System.out.println(customer);

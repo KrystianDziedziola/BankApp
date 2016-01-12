@@ -1,6 +1,6 @@
 package businessLogic;
 
-import presentationLayer.View;
+import presentationLayer.ConsoleView;
 import dataLayer.BankAccount;
 import dataLayer.dao.bankAccount.BankAccountDaoInterface;
 import dataLayer.dao.bankAccount.BankAccountMySqlDao;
@@ -8,11 +8,11 @@ import dataLayer.dao.bankAccount.BankAccountXmlDao;
 
 public class BankAccountManager {
 
-	private View view;
+	private ConsoleView view;
 	
 	private BankAccountDaoInterface bankAccountDao;
 	
-	public BankAccountManager(View view) {
+	public BankAccountManager(ConsoleView view) {
 		this.view = view;
 	}
 	
