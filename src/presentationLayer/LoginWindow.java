@@ -1,24 +1,28 @@
 package presentationLayer;
 
+import java.awt.Container;
 import java.awt.Dimension;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import java.awt.GridBagLayout;
 import javax.swing.SpringLayout;
+import java.awt.Font;
 
 public class LoginWindow {
 
+	private final int FRAME_WIDTH = 360;
+	private final int FRAME_HEIGHT = 220;
+	
 	private JFrame frame;
+	private Container frameContentPane;
 	SpringLayout frameSpringLayout;
 	private JLabel infoLabel;
-	private JLabel loginLabel, passwordlabel;
-	private JTextField loginTextField, passwordTextField;
+	private JLabel loginLabel, passwordLabel;
+	private JTextField loginTextField;
+	private JPasswordField passwordField;
 	private JButton loginButton, createUserButton;
-	private JTextField textField;
-	private JTextField textField_1;
 
 	public LoginWindow() {
 		initialize();
@@ -30,86 +34,91 @@ public class LoginWindow {
 	
 	private void initialize() {
 		createFrame();
+		createFrameLayout();
 		createInfoLabel();
 		createInputComponents();		
 		createButtons();
-		
 		addComponentsToLayout();
 	}
 
 	private void createFrame() {
-		frame = new JFrame("Login");
-		final int FRAME_WIDTH = 450,
-				  FRAME_HEIGHT = 300;
+		frame = new JFrame("Log in");
+		frameContentPane = frame.getContentPane();
 		frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		centerFrame(frame);
-//		frame.setResizable(false);
+		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frameSpringLayout = new SpringLayout();
-		frame.getContentPane().setLayout(frameSpringLayout);
+		centerFrame(frame);
 	}
 	
 	private void centerFrame(JFrame frame) {
 		frame.setLocationRelativeTo(null);
 	}
 	
+	private void createFrameLayout() {
+		frameSpringLayout = new SpringLayout();
+		frameContentPane.setLayout(frameSpringLayout);
+	}
+	
 	private void createInfoLabel() {
-		infoLabel = new JLabel("Welcome! Login into MySql database.");
+		infoLabel = new JLabel("Welcome! Log into MySql database.");
+		frameSpringLayout.putConstraint(SpringLayout.NORTH, infoLabel, 23, SpringLayout.NORTH, frameContentPane);
 	}
 	
 	private void createInputComponents() {
+		createLoginInputComponents();
+		createPasswordInputComponents();
+	}
+
+	private void createLoginInputComponents() {
 		loginLabel = new JLabel("Login: ");
+		loginLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		loginTextField = new JTextField(15);
-		loginTextField.setSize(150, 20);
-		passwordlabel = new JLabel("Password: ");
-		passwordTextField = new JTextField(15);
-		passwordTextField.setSize(150, 20);
+		loginTextField.setColumns(10);
 	}
 	
+	private void createPasswordInputComponents() {
+		passwordLabel = new JLabel("Password: ");		
+		passwordLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		passwordField = new JPasswordField(15);
+		passwordField.setColumns(10);
+	}
+
 	private void createButtons() {
 		Dimension buttonSize = new Dimension(150, 30);
-		loginButton = new JButton("Login");
+		loginButton = new JButton("Log in");
 		loginButton.setSize(buttonSize);
 		createUserButton = new JButton("Create user");
 		createUserButton.setSize(buttonSize);
 	}
 	
 	private void addComponentsToLayout() {
-		frameSpringLayout.putConstraint(SpringLayout.NORTH, infoLabel, 10, SpringLayout.NORTH, frame.getContentPane());
-		frameSpringLayout.putConstraint(SpringLayout.WEST, infoLabel, 91, SpringLayout.WEST, frame.getContentPane());
-		frame.getContentPane().add(infoLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("1");
-		frameSpringLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_1, 45, SpringLayout.NORTH, frame.getContentPane());
-		frameSpringLayout.putConstraint(SpringLayout.WEST, lblNewLabel_1, 36, SpringLayout.WEST, frame.getContentPane());
-		frame.getContentPane().add(lblNewLabel_1);
-		
-		textField = new JTextField();
-		frameSpringLayout.putConstraint(SpringLayout.WEST, textField, 0, SpringLayout.WEST, infoLabel);
-		frameSpringLayout.putConstraint(SpringLayout.SOUTH, textField, 0, SpringLayout.SOUTH, lblNewLabel_1);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
-		
-		JLabel lblNewLabel_2 = new JLabel("2");
-		frameSpringLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_2, 12, SpringLayout.SOUTH, lblNewLabel_1);
-		frameSpringLayout.putConstraint(SpringLayout.WEST, lblNewLabel_2, 0, SpringLayout.WEST, lblNewLabel_1);
-		frame.getContentPane().add(lblNewLabel_2);
-		
-		textField_1 = new JTextField();
-		frameSpringLayout.putConstraint(SpringLayout.WEST, textField_1, 0, SpringLayout.WEST, infoLabel);
-		frameSpringLayout.putConstraint(SpringLayout.SOUTH, textField_1, 0, SpringLayout.SOUTH, lblNewLabel_2);
-		frame.getContentPane().add(textField_1);
-		textField_1.setColumns(10);
-		
-		JButton btnNewButton = new JButton("1");
-		frameSpringLayout.putConstraint(SpringLayout.NORTH, btnNewButton, 23, SpringLayout.SOUTH, textField_1);
-		frameSpringLayout.putConstraint(SpringLayout.WEST, btnNewButton, 51, SpringLayout.WEST, frame.getContentPane());
-		frame.getContentPane().add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("2");
-		frameSpringLayout.putConstraint(SpringLayout.NORTH, btnNewButton_1, 23, SpringLayout.SOUTH, textField_1);
-		frameSpringLayout.putConstraint(SpringLayout.WEST, btnNewButton_1, 24, SpringLayout.EAST, btnNewButton);
-		frameSpringLayout.putConstraint(SpringLayout.SOUTH, btnNewButton_1, 0, SpringLayout.SOUTH, btnNewButton);
-		frame.getContentPane().add(btnNewButton_1);
+		putLayoutConstraints();
+		frameContentPane.add(infoLabel);
+		frameContentPane.add(loginLabel);
+		frameContentPane.add(loginTextField);
+		frameContentPane.add(passwordLabel);
+		frameContentPane.add(passwordField);
+		frameContentPane.add(loginButton);
+		frameContentPane.add(createUserButton);
+	}
+	
+	private void putLayoutConstraints() {
+		//code auto-generated by Window Builder
+		frameSpringLayout.putConstraint(SpringLayout.WEST, loginLabel, 85, SpringLayout.WEST, frameContentPane);
+		frameSpringLayout.putConstraint(SpringLayout.NORTH, loginLabel, 3, SpringLayout.NORTH, loginTextField);
+		frameSpringLayout.putConstraint(SpringLayout.EAST, loginLabel, -19, SpringLayout.WEST, loginTextField);
+		frameSpringLayout.putConstraint(SpringLayout.NORTH, loginTextField, 64, SpringLayout.NORTH, frameContentPane);
+		frameSpringLayout.putConstraint(SpringLayout.WEST, loginTextField, 136, SpringLayout.WEST, frameContentPane);
+		frameSpringLayout.putConstraint(SpringLayout.WEST, infoLabel, 0, SpringLayout.WEST, passwordLabel);
+		frameSpringLayout.putConstraint(SpringLayout.WEST, passwordLabel, 64, SpringLayout.WEST, frameContentPane);
+		frameSpringLayout.putConstraint(SpringLayout.EAST, passwordLabel, 0, SpringLayout.EAST, loginLabel);
+		frameSpringLayout.putConstraint(SpringLayout.NORTH, passwordLabel, 5, SpringLayout.NORTH, passwordField);
+		frameSpringLayout.putConstraint(SpringLayout.NORTH, passwordField, 6, SpringLayout.SOUTH, loginTextField);
+		frameSpringLayout.putConstraint(SpringLayout.WEST, passwordField, 136, SpringLayout.WEST, frameContentPane);
+		frameSpringLayout.putConstraint(SpringLayout.NORTH, loginButton, 23, SpringLayout.SOUTH, passwordField);
+		frameSpringLayout.putConstraint(SpringLayout.EAST, loginButton, -191, SpringLayout.EAST, frameContentPane);
+		frameSpringLayout.putConstraint(SpringLayout.WEST, loginButton, 0, SpringLayout.WEST, infoLabel);
+		frameSpringLayout.putConstraint(SpringLayout.NORTH, createUserButton, 23, SpringLayout.SOUTH, passwordField);
+		frameSpringLayout.putConstraint(SpringLayout.WEST, createUserButton, 24, SpringLayout.EAST, loginButton);
 	}
 }
