@@ -1,6 +1,5 @@
 package starter;
 
-import presentationLayer.ConsoleView;
 import businessLogic.BankAccountManager;
 import businessLogic.CustomerManager;
 import businessLogic.LoginWindowManager;

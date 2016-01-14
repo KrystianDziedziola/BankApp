@@ -18,7 +18,10 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 	public Customer find(long customerId) {
 		Customer customer = getCustomer(customerId);
 		Address address = getAddress(customerId);
-		customer.setAddress(address);
+		if(customer != null) {
+			customer.setAddress(address);
+
+		}
 		return customer;
 	}
 
@@ -124,12 +127,15 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 
 	private Customer convertResultSetToCustomerObject(ResultSet resultSet) {
 		try {
-			resultSet.next();
-			Long userId = resultSet.getLong("user_id");
-			String name = resultSet.getString("name");
-			String surname = resultSet.getString("surname");
-			String password = resultSet.getString("password");
-			return new Customer(userId, name, surname, password, null);
+			if(!resultSet.next()) {
+				return null;
+			} else {
+				Long userId = resultSet.getLong("user_id");
+				String name = resultSet.getString("name");
+				String surname = resultSet.getString("surname");
+				String password = resultSet.getString("password");
+				return new Customer(userId, name, surname, password, null);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -148,11 +154,14 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 
 	private Address convertResultSetToAddressObject(ResultSet resultSet) {
 		try {
-			resultSet.next();
-			String street = resultSet.getString("street");
-			String city = resultSet.getString("city");
-			String postcode = resultSet.getString("postcode");
-			return new Address(street, city, postcode);
+			if(!resultSet.next()) {
+				return null;
+			} else {
+				String street = resultSet.getString("street");
+				String city = resultSet.getString("city");
+				String postcode = resultSet.getString("postcode");
+				return new Address(street, city, postcode);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

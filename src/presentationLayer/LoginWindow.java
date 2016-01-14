@@ -2,12 +2,14 @@ package presentationLayer;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.EventQueue;
+
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.text.NumberFormatter;
 
@@ -32,7 +34,11 @@ public class LoginWindow {
 	private JButton loginButton, createUserButton;
 
 	public LoginWindow() {
-		initialize();
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				initialize();
+			}
+		});
 	}
 	
 	public void show() {
@@ -49,6 +55,10 @@ public class LoginWindow {
 	
 	public String getPassword() {
 		return passwordField.getText(); //FIXME: maybe I will
+	}
+	
+	public void displayMessageDialog(String title, String message) {
+		JOptionPane.showMessageDialog(frame, message, title, JOptionPane.PLAIN_MESSAGE);
 	}
 	
 	private void initialize() {
@@ -80,8 +90,6 @@ public class LoginWindow {
 	
 	private void createInfoLabel() {
 		infoLabel = new JLabel("Welcome! Log into Bank App.");
-		frameSpringLayout.putConstraint(SpringLayout.NORTH, infoLabel, 20, SpringLayout.NORTH, frame.getContentPane());
-		frameSpringLayout.putConstraint(SpringLayout.EAST, infoLabel, -94, SpringLayout.EAST, frame.getContentPane());
 	}
 	
 	private void createInputComponents() {
@@ -93,13 +101,13 @@ public class LoginWindow {
 		loginLabel = new JLabel("Login: ");
 		loginLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
-		NumberFormatter numberFormatter = new NumberFormatter(NumberFormat.getIntegerInstance());
+		/*NumberFormatter numberFormatter = new NumberFormatter(NumberFormat.getIntegerInstance());
 		numberFormatter.setValueClass(Long.class);
 		numberFormatter.setAllowsInvalid(false);	//FIXME:can't delete last number
 //		numberFormatter.setCommitsOnValidEdit(true);
-		numberFormatter.setMinimum(0L);
+		numberFormatter.setMinimum(0L);*/
 		
-		loginTextField = new JFormattedTextField(numberFormatter);
+		loginTextField = new JFormattedTextField(/*numberFormatter*/);
 		loginTextField.setColumns(TEXT_FIELD_NUMBER_OF_COLUMNS);
 	}
 	
@@ -113,11 +121,8 @@ public class LoginWindow {
 	private void createButtons() {
 		Dimension buttonSize = new Dimension(150, 30);
 		loginButton = new JButton("Log in");
-		frameSpringLayout.putConstraint(SpringLayout.WEST, loginButton, 64, SpringLayout.WEST, frame.getContentPane());
 		loginButton.setSize(buttonSize);
 		createUserButton = new JButton("Create user");
-		frameSpringLayout.putConstraint(SpringLayout.WEST, createUserButton, 187, SpringLayout.WEST, frame.getContentPane());
-		frameSpringLayout.putConstraint(SpringLayout.EAST, loginButton, -24, SpringLayout.WEST, createUserButton);
 		createUserButton.setSize(buttonSize);
 	}
 	
@@ -146,6 +151,11 @@ public class LoginWindow {
 		frameSpringLayout.putConstraint(SpringLayout.WEST, passwordField, 136, SpringLayout.WEST, frameContentPane);
 		frameSpringLayout.putConstraint(SpringLayout.NORTH, loginButton, 23, SpringLayout.SOUTH, passwordField);
 		frameSpringLayout.putConstraint(SpringLayout.NORTH, createUserButton, 23, SpringLayout.SOUTH, passwordField);
+		frameSpringLayout.putConstraint(SpringLayout.NORTH, infoLabel, 20, SpringLayout.NORTH, frame.getContentPane());
+		frameSpringLayout.putConstraint(SpringLayout.EAST, infoLabel, -94, SpringLayout.EAST, frame.getContentPane());
+		frameSpringLayout.putConstraint(SpringLayout.WEST, createUserButton, 187, SpringLayout.WEST, frame.getContentPane());
+		frameSpringLayout.putConstraint(SpringLayout.EAST, loginButton, -24, SpringLayout.WEST, createUserButton);
+		frameSpringLayout.putConstraint(SpringLayout.WEST, loginButton, 64, SpringLayout.WEST, frame.getContentPane());
 	}
 	
 }

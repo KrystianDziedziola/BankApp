@@ -15,7 +15,7 @@ public class LoginWindowManager {
 		try {
 			customerManager.connect();
 		} catch (Exception e) {
-			e.printStackTrace();
+//			loginWindow.displayMessageDialog("not connected");
 		}
 	}
 	
@@ -30,10 +30,7 @@ public class LoginWindowManager {
 	
 	private boolean isLoginSucceed() {
 		Long login = Long.parseLong(loginWindow.getLogin());
-		System.out.println(login);
-		
 		String password = loginWindow.getPassword();
-		System.out.println(password);
 		
 		Customer customer = customerManager.findCustomerById(login);
 		if(customer == null) {
@@ -51,9 +48,9 @@ public class LoginWindowManager {
 		
 		public void actionPerformed(ActionEvent arg0) {
 			if(isLoginSucceed()) {
-				System.out.println("ok");
+				loginWindow.displayMessageDialog("Log in information", "Correct! You are logged in.");
 			} else {
-				System.out.println("not");
+				loginWindow.displayMessageDialog("Log in information", "Incorrect! Wrong login or password.");
 			}
 		}
 		
