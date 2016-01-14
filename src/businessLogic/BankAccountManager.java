@@ -1,28 +1,12 @@
 package businessLogic;
 
-import presentationLayer.ConsoleView;
 import dataLayer.BankAccount;
-import dataLayer.dao.bankAccount.BankAccountDaoInterface;
-import dataLayer.dao.bankAccount.BankAccountMySqlDao;
-import dataLayer.dao.bankAccount.BankAccountXmlDao;
+import dataLayer.dao.BankAccountDaoInterface;
+import dataLayer.dao.BankAccountMySqlDao;
 
 public class BankAccountManager {
 
-	private ConsoleView view;
-	
-	private BankAccountDaoInterface bankAccountDao;
-	
-	public BankAccountManager(ConsoleView view) {
-		this.view = view;
-	}
-	
-	public void setDaoToMySql() {
-		bankAccountDao = new BankAccountMySqlDao();
-	}
-	
-	public void setDaoToXml() {
-		bankAccountDao = new BankAccountXmlDao();
-	}
+	private BankAccountDaoInterface bankAccountDao = new BankAccountMySqlDao();
 	
 	public void connect() throws Exception {
 		if(bankAccountDao == null) {
@@ -76,10 +60,6 @@ public class BankAccountManager {
 		} else {
 			throw new Exception("Not enough money for transfer");
 		}
-	}
-
-	public void printBankAccountInformation(BankAccount bankAccount) {
-		view.printBankAccountInformation(bankAccount);
 	}
 
 }

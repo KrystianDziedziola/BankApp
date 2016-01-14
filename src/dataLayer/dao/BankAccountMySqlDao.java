@@ -1,11 +1,10 @@
-package dataLayer.dao.bankAccount;
+package dataLayer.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import dataLayer.BankAccount;
-import dataLayer.dao.MySqlDao;
 
 public class BankAccountMySqlDao extends MySqlDao implements BankAccountDaoInterface {
 	

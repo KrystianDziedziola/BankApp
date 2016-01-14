@@ -2,29 +2,14 @@ package businessLogic;
 
 import java.util.ArrayList;
 
-import presentationLayer.ConsoleView;
 import dataLayer.Address;
 import dataLayer.Customer;
-import dataLayer.dao.customer.CustomerDaoInterface;
-import dataLayer.dao.customer.CustomerMySqlDao;
-import dataLayer.dao.customer.CustomerXmlDao;
+import dataLayer.dao.CustomerDaoInterface;
+import dataLayer.dao.CustomerMySqlDao;
 
 public class CustomerManager {
 
-	private CustomerDaoInterface customerDao;
-	private ConsoleView view;
-	
-	public CustomerManager(ConsoleView view) {
-		this.view = view;
-	}
-	
-	public void setDaoToMySql() {
-		customerDao = new CustomerMySqlDao();
-	}
-	
-	public void setDaoToXml() {
-		customerDao = new CustomerXmlDao();
-	}
+	private CustomerDaoInterface customerDao = new CustomerMySqlDao();;
 	
 	public void connect() throws Exception {
 		if(customerDao == null) {
@@ -63,17 +48,6 @@ public class CustomerManager {
 	
 	public void closeConnection() {
 		customerDao.closeConnection();
-	}
-
-	public void printCustomerInfoById(long customerId) {
-		view.printCustomerInformation(customerDao.find(customerId));
-	}
-	
-	public void printAllCustomersInfo() {
-		ArrayList<Customer> allCustomers = customerDao.getAllCustomersList();
-		for(Customer customer:allCustomers) {
-			view.printCustomerInformation(customer);
-		}
 	}
 
 }

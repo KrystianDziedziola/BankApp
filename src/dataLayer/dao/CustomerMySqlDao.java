@@ -1,4 +1,4 @@
-package dataLayer.dao.customer;
+package dataLayer.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import dataLayer.Address;
 import dataLayer.Customer;
-import dataLayer.dao.MySqlDao;
 
 public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 

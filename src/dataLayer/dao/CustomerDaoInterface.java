@@ -1,4 +1,4 @@
-package dataLayer.dao.customer;
+package dataLayer.dao;
 
 import java.util.ArrayList;
 

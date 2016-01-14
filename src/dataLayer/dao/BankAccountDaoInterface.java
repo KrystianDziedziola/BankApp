@@ -1,4 +1,4 @@
-package dataLayer.dao.bankAccount;
+package dataLayer.dao;
 
 import dataLayer.BankAccount;
 
