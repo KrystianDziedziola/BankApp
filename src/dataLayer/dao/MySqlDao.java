@@ -18,17 +18,11 @@ public class MySqlDao {
 	protected String user = "user";
 	protected String password = "logitech1";
 	
-	public void connect() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost/" + databaseName + "?user=" + user + "&password=" + password);
-			statement = connection.createStatement();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
+	public void connect() throws ClassNotFoundException, SQLException {
+		Class.forName("com.mysql.jdbc.Driver");
+		connection = DriverManager.getConnection(
+				"jdbc:mysql://localhost/" + databaseName + "?user=" + user + "&password=" + password);
+		statement = connection.createStatement();
 	}
 	
 	public void closeConnection() {

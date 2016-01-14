@@ -15,13 +15,15 @@ public class LoginWindowManager {
 		try {
 			customerManager.connect();
 		} catch (Exception e) {
-//			loginWindow.displayMessageDialog("not connected");
+			loginWindow.displayMessageDialog("Connection error", "Check your connection with database.");
+			loginWindow.close();
+			System.exit(0);
 		}
+		defineLoginButtonAction();
 	}
 	
 	public void show() {
 		loginWindow.show();
-		defineLoginButtonAction();
 	}
 
 	private void defineLoginButtonAction() {
@@ -29,7 +31,12 @@ public class LoginWindowManager {
 	}
 	
 	private boolean isLoginSucceed() {
-		Long login = Long.parseLong(loginWindow.getLogin());
+		Long login;
+		try {
+			login = Long.parseLong(loginWindow.getLogin());
+		} catch(NumberFormatException e) {
+			return false;
+		}
 		String password = loginWindow.getPassword();
 		
 		Customer customer = customerManager.findCustomerById(login);
@@ -49,6 +56,8 @@ public class LoginWindowManager {
 		public void actionPerformed(ActionEvent arg0) {
 			if(isLoginSucceed()) {
 				loginWindow.displayMessageDialog("Log in information", "Correct! You are logged in.");
+				loginWindow.close();
+				//open new window
 			} else {
 				loginWindow.displayMessageDialog("Log in information", "Incorrect! Wrong login or password.");
 			}

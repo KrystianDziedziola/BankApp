@@ -45,6 +45,10 @@ public class LoginWindow {
 		frame.setVisible(true);
 	}
 	
+	public void close() {
+		frame.setVisible(false);
+	}
+	
 	public void addLoginButtonListener(ActionListener actionListener) {
 		loginButton.addActionListener(actionListener);
 	}

@@ -1,5 +1,6 @@
 package businessLogic;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dataLayer.Address;
@@ -9,14 +10,10 @@ import dataLayer.dao.CustomerMySqlDao;
 
 public class CustomerManager {
 
-	private CustomerDaoInterface customerDao = new CustomerMySqlDao();;
+	private CustomerDaoInterface customerDao = new CustomerMySqlDao();
 	
-	public void connect() throws Exception {
-		if(customerDao == null) {
-			throw new Exception("No dao type selected");
-		} else {
+	public void connect() throws ClassNotFoundException, SQLException {
 			customerDao.connect();
-		}
 	}
 
 	public void addCustomer(long userId, String name, String surname, String password,

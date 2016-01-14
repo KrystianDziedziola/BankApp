@@ -20,7 +20,6 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 		Address address = getAddress(customerId);
 		if(customer != null) {
 			customer.setAddress(address);
-
 		}
 		return customer;
 	}
