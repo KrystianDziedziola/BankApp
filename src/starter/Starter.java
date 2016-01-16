@@ -1,5 +1,7 @@
 package starter;
 
+import java.awt.EventQueue;
+
 import businessLogic.ConnectionWindowManager;
 
 public class Starter {
@@ -9,11 +11,11 @@ public class Starter {
 	}
 	
 	public Starter() {		
-		try {
-			new ConnectionWindowManager().show();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+					new ConnectionWindowManager().show();
+			}
+		});
 	}	
 
 }

@@ -31,6 +31,7 @@ public class ConnectionWindowManager {
 					connectionWindow.getLogin(), connectionWindow.getPassword());
 			try {
 				mySqlDao.connect(loginInformation);
+				//TODO: maybe change this a bit. Get Connection object and pass it to managers, so they don't have to connect separately 
 				connectionWindow.displayMessageDialog("Connected", "You've successfully connected to database.");
 				mySqlDao.closeConnection();
 				connectionWindow.close();

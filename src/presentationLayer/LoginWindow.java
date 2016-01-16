@@ -11,11 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.SpringLayout;
-import javax.swing.text.NumberFormatter;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
-import java.text.NumberFormat;
 
 public class LoginWindow {
 

@@ -2,7 +2,6 @@ package presentationLayer;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 
@@ -32,11 +31,7 @@ public class ConnectionWindow {
 	private JButton connectButton;
 
 	public ConnectionWindow() {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-				initialize();
-//			}
-//		});
+		initialize();
 	}
 	
 	public void show() {
