@@ -13,7 +13,7 @@ public class LoginWindowManager {
 
 	public LoginWindowManager() {
 		try {
-			customerManager.connect();
+//			customerManager.connect();
 		} catch (Exception e) {
 			loginWindow.displayMessageDialog("Connection error", "Check your connection with database.");
 			loginWindow.close();

@@ -1,6 +1,7 @@
 package businessLogic;
 
 import dataLayer.BankAccount;
+import dataLayer.LoginInformation;
 import dataLayer.dao.BankAccountDaoInterface;
 import dataLayer.dao.BankAccountMySqlDao;
 
@@ -8,12 +9,8 @@ public class BankAccountManager {
 
 	private BankAccountDaoInterface bankAccountDao = new BankAccountMySqlDao();
 	
-	public void connect() throws Exception {
-		if(bankAccountDao == null) {
-			throw new Exception("No dao type selected");
-		} else {
-			bankAccountDao.connect();
-		}
+	public void connect(String login, String password) throws Exception {
+		bankAccountDao.connect(new LoginInformation(login, password));
 	}
 
 	public void create(long accountNumber, int startingBalance, long userId) {

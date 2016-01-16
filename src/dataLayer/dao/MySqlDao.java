@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import dataLayer.LoginInformation;
+
 public class MySqlDao {
 
 	protected Connection connection;
@@ -15,13 +17,13 @@ public class MySqlDao {
 	protected ResultSet resultSet;
 	
 	protected String databaseName = "BankAppDatabase";
-	protected String user = "user";
-	protected String password = "logitech1";
 	
-	public void connect() throws ClassNotFoundException, SQLException {
+	public void connect(LoginInformation loginInformation) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
 		connection = DriverManager.getConnection(
-				"jdbc:mysql://localhost/" + databaseName + "?user=" + user + "&password=" + password);
+				"jdbc:mysql://localhost/" + databaseName + "?user=" + loginInformation.getLogin() + 
+				"&password=" + loginInformation.getPassword()
+		);
 		statement = connection.createStatement();
 	}
 	

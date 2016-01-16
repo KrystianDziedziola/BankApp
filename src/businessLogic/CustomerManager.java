@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import dataLayer.Address;
 import dataLayer.Customer;
+import dataLayer.LoginInformation;
 import dataLayer.dao.CustomerDaoInterface;
 import dataLayer.dao.CustomerMySqlDao;
 
@@ -12,8 +13,8 @@ public class CustomerManager {
 
 	private CustomerDaoInterface customerDao = new CustomerMySqlDao();
 	
-	public void connect() throws ClassNotFoundException, SQLException {
-			customerDao.connect();
+	public void connect(String login, String password) throws ClassNotFoundException, SQLException {
+			customerDao.connect(new LoginInformation(login, password));
 	}
 
 	public void addCustomer(long userId, String name, String surname, String password,

@@ -4,10 +4,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dataLayer.Customer;
+import dataLayer.LoginInformation;
 
 public interface CustomerDaoInterface {
 	
-	public void connect() throws ClassNotFoundException, SQLException;
+	public void connect(LoginInformation loginInformation) throws ClassNotFoundException, SQLException;
 	public void create(Customer customer);
 	public Customer find(long customerId);
 	public void delete(long customerId);
