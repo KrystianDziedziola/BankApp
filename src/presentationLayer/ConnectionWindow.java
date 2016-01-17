@@ -68,7 +68,7 @@ public class ConnectionWindow {
 	}
 
 	private void createFrame() {
-		frame = new JFrame("Log in");
+		frame = new JFrame("Bank App - Connect");
 		frameContentPane = frame.getContentPane();
 		frame.setSize(FRAME_SIZE);
 		frame.setResizable(false);
