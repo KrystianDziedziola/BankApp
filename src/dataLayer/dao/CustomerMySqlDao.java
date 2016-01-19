@@ -26,7 +26,7 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 
 	public void delete(long customerId) {
 		try {
-			preparedStatement = connection.prepareStatement(
+			PreparedStatement preparedStatement = connection.prepareStatement(
 					"DELETE FROM " + databaseName + ".customers WHERE user_id = " + customerId);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
@@ -47,14 +47,13 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 		return find(customer.getUserId());
 	}
 
-	//FIXME:returns only one, last customer
 	public ArrayList<Customer> getAllCustomersList() {
 		try {
 			ArrayList<Customer> allCustomersList = new ArrayList<Customer>();
-			resultSet = statement.executeQuery("SELECT * FROM " + databaseName + ".customers");
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM " + databaseName + ".customers");
 			while(resultSet.next()) {
-				Long userId = resultSet.getLong("user_id");
-				allCustomersList.add(find(userId));
+				//add address here
+				allCustomersList.add(convertResultSetToCustomerObject(resultSet));
 			}
 			return allCustomersList;
 		} catch (SQLException e) {
@@ -65,7 +64,7 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 	
 	private void saveCustomerInfo(Customer customer) {
 		try {
-			preparedStatement = connection.prepareStatement(
+			PreparedStatement preparedStatement = connection.prepareStatement(
 					"INSERT INTO "+ databaseName + ".customers VALUES (?, ?, ?, ?)");
 			setCustomerInfo(preparedStatement, customer);		
 		} catch (SQLException e) {
@@ -90,7 +89,7 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 	
 	private void saveCustomerAddress(Customer customer) {
 		try {
-			preparedStatement = connection.prepareStatement(
+			PreparedStatement preparedStatement = connection.prepareStatement(
 					"INSERT INTO "+ databaseName + ".addresses VALUES (?, ?, ?, ?)");
 			setAddressInfo(preparedStatement, customer);		
 		} catch (SQLException e) {
@@ -116,25 +115,23 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 
 	private Customer getCustomer(long customerId) {
 		try {
-			resultSet = statement.executeQuery(
+			ResultSet resultSet = statement.executeQuery(
 					"SELECT * FROM " + databaseName + ".customers WHERE user_id = " + customerId);	
+			resultSet.next();
+			return convertResultSetToCustomerObject(resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return convertResultSetToCustomerObject(resultSet);
+		return null;
 	}
 
 	private Customer convertResultSetToCustomerObject(ResultSet resultSet) {
 		try {
-			if(!resultSet.next()) {
-				return null;
-			} else {
-				Long userId = resultSet.getLong("user_id");
-				String name = resultSet.getString("name");
-				String surname = resultSet.getString("surname");
-				String password = resultSet.getString("password");
-				return new Customer(userId, name, surname, password, null);
-			}
+			Long userId = resultSet.getLong("user_id");
+			String name = resultSet.getString("name");
+			String surname = resultSet.getString("surname");
+			String password = resultSet.getString("password");
+			return new Customer(userId, name, surname, password, null);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -143,12 +140,13 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 	
 	private Address getAddress(long customerId) {
 		try {
-			resultSet = statement.executeQuery(
+			ResultSet resultSet = statement.executeQuery(
 					"SELECT * FROM " + databaseName + ".addresses WHERE user_id = " + customerId);	
+			return convertResultSetToAddressObject(resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return convertResultSetToAddressObject(resultSet);
+		return null;
 	}
 
 	private Address convertResultSetToAddressObject(ResultSet resultSet) {
@@ -168,16 +166,16 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 	}
 	
 	private void updateCustomer(Customer customer) throws SQLException {
-		preparedStatement = connection.prepareStatement(
+		PreparedStatement preparedStatement = connection.prepareStatement(
 				"UPDATE " + databaseName + ".customers SET " + 
 				"user_id = ?, name = ?, surname = ?, password = ? WHERE USER_ID = " + customer.getUserId());
 		setCustomerInfo(preparedStatement, customer);
 	}
 	
 	private void updateAddress(Customer customer) throws SQLException {
-		preparedStatement = connection.prepareStatement(
+		PreparedStatement preparedStatement = connection.prepareStatement(
 				"UPDATE " + databaseName + ".addresses SET " + 
-				"id = default, street = ?, city = ?, postcode = ?, user_id = ? WHERE user_id = " + customer.getUserId());
+				"street = ?, city = ?, postcode = ?, user_id = ? WHERE user_id = " + customer.getUserId());
 		setAddressInfo(preparedStatement, customer);
 	}
 	

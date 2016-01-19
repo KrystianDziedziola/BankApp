@@ -39,7 +39,7 @@ public class LoginWindowManager {
 		}
 		String password = loginWindow.getPassword();
 		
-		Customer customer = customerManager.findCustomerById(login);
+		Customer customer = customerManager.findById(login);
 		if(customer == null) {
 			return false;
 		} else {

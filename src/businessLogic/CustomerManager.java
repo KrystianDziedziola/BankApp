@@ -17,18 +17,18 @@ public class CustomerManager {
 			customerDao.connect(new LoginInformation(login, password));
 	}
 
-	public void addCustomer(long userId, String name, String surname, String password,
+	public void add(long userId, String name, String surname, String password,
 							String street, String city, String postCode) {
 		Address address = new Address(street, city, postCode);
 		Customer customer = new Customer(userId, name, surname, password, address);
 		customerDao.create(customer);
 	}
 	
-	public Customer findCustomerById(long customerId) {
+	public Customer findById(long customerId) {
 		return customerDao.find(customerId);
 	}
 	
-	public void updateCustomer(Customer customer) {
+	public void update(Customer customer) {
 		customerDao.update(customer);
 	}
 	

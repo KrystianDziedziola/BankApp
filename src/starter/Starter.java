@@ -1,8 +1,13 @@
 package starter;
 
 import java.awt.EventQueue;
+import java.sql.SQLException;
+import java.util.List;
 
 import businessLogic.ConnectionWindowManager;
+import businessLogic.CustomerManager;
+import dataLayer.Address;
+import dataLayer.Customer;
 
 public class Starter {
 
@@ -16,6 +21,23 @@ public class Starter {
 					new ConnectionWindowManager().show();
 			}
 		});
+		
+		/*CustomerManager customerManager = new CustomerManager();
+		try {
+			customerManager.connect("user", "logitech1");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		List<Customer> allCustomers = customerManager.getAllCustomersList();
+		
+		
+		for(Customer customer:allCustomers) {
+			System.out.println(customer);
+		}*/
 	}	
+	
+	
 
 }
