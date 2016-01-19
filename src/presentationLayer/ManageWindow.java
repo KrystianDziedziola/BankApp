@@ -5,27 +5,33 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.SpringLayout;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import java.awt.Font;
+import javax.swing.JScrollPane;
 
 public class ManageWindow {
 
-	private final Dimension frameSize = new Dimension(800, 600);
+	private final Dimension frameSize = new Dimension(800, 400);
 	
 	private JFrame frame;
 	private Container frameContentPane;
 	private JLabel cutomersLabel;
 	private JLabel bankAccountsLabel;
+	
 	private JButton addCustomerButton;
 	private JButton changeCustomerButton;
 	private JButton deleteCustomerButton;
+	
+	private JButton addBankAccountButton;
+	private JButton deleteBankAccountButton;
+	private JButton changeBankAccountButton;
+	
+	private JScrollPane customersTableScrollPane;
 	private JTable customersTable;
 	private JTable bankAccountsTable;
-	
-	private SpringLayout springLayout;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -56,6 +62,7 @@ public class ManageWindow {
 	private void initializeFrame() {
 		frame = new JFrame("Bank App - Manage");
 		frameContentPane = frame.getContentPane();
+		frameContentPane.setLayout(null);
 		frame.setSize(frameSize);
 		centerFrame(frame);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,78 +73,62 @@ public class ManageWindow {
 	}
 	
 	private void setupFrameLayout() {
-		springLayout = new SpringLayout();
-		frameContentPane.setLayout(springLayout);
 	}
 	
 	private void initializeLabels() {
 		cutomersLabel = new JLabel("Customers");
-		springLayout.putConstraint(SpringLayout.WEST, cutomersLabel, 170, SpringLayout.WEST, frame.getContentPane());
+		cutomersLabel.setBounds(168, 30, 75, 17);
 		cutomersLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		
 		bankAccountsLabel = new JLabel("Bank accounts");
-		springLayout.putConstraint(SpringLayout.NORTH, bankAccountsLabel, 0, SpringLayout.NORTH, cutomersLabel);
+		bankAccountsLabel.setBounds(553, 118, 101, 17);
 		bankAccountsLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 	}
 	
 	private void initializeButtons() {
 		addCustomerButton = new JButton("Add");
-		springLayout.putConstraint(SpringLayout.NORTH, addCustomerButton, 509, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, addCustomerButton, 47, SpringLayout.WEST, frame.getContentPane());
+		addCustomerButton.setBounds(47, 313, 105, 23);
 		changeCustomerButton = new JButton("Change");
-		springLayout.putConstraint(SpringLayout.NORTH, changeCustomerButton, 509, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, changeCustomerButton, 269, SpringLayout.WEST, frame.getContentPane());
+		changeCustomerButton.setBounds(198, 313, 105, 23);
 		deleteCustomerButton = new JButton("Delete");
-		springLayout.putConstraint(SpringLayout.EAST, addCustomerButton, -6, SpringLayout.WEST, deleteCustomerButton);
-		springLayout.putConstraint(SpringLayout.WEST, deleteCustomerButton, 158, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, deleteCustomerButton, -6, SpringLayout.WEST, changeCustomerButton);
+		deleteCustomerButton.setBounds(347, 313, 105, 23);
+		
+		addBankAccountButton = new JButton("Add");
+		addBankAccountButton.setBounds(478, 313, 80, 23);
+		deleteBankAccountButton = new JButton("Delete");
+		deleteBankAccountButton.setBounds(664, 313, 80, 23);
+		changeBankAccountButton = new JButton("Change");
+		changeBankAccountButton.setBounds(568, 313, 80, 23);
 	}
 	
 	private void initializeTables() {
-		customersTable = new JTable();
-		springLayout.putConstraint(SpringLayout.NORTH, customersTable, 56, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, cutomersLabel, -15, SpringLayout.NORTH, customersTable);
-		springLayout.putConstraint(SpringLayout.WEST, customersTable, 47, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.NORTH, deleteCustomerButton, 6, SpringLayout.SOUTH, customersTable);
-		springLayout.putConstraint(SpringLayout.SOUTH, customersTable, -6, SpringLayout.NORTH, addCustomerButton);
+		String[] customerTableColumnNames = {"ID", "NAME", "SURNAME", "PASSWORD"/*, "STREET", "CITY", "POSTCODE"*/};
+		String[][] customerTableData = {{"","", "","", "", ""},{"", "", "","", "", ""}};
+		customersTableScrollPane = new JScrollPane();
+		
+		customersTable = new JTable(customerTableData, customerTableColumnNames);
+		customersTableScrollPane.add(customersTable);
+		customersTableScrollPane.setViewportView(customersTable);
+		
 		bankAccountsTable = new JTable();
-		springLayout.putConstraint(SpringLayout.EAST, customersTable, -37, SpringLayout.WEST, bankAccountsTable);
-		springLayout.putConstraint(SpringLayout.NORTH, bankAccountsTable, 58, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, bankAccountsTable, 411, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, bankAccountsTable, -46, SpringLayout.EAST, frame.getContentPane());
+		bankAccountsTable.setBounds(478, 146, 268, 156);
 	}
 	
 	private void addComponentsToFrame() {
-		putConstraints();
+		setBounds();
 		frameContentPane.add(cutomersLabel);
 		frameContentPane.add(bankAccountsLabel);
 		frameContentPane.add(addCustomerButton);
 		frameContentPane.add(changeCustomerButton);
 		frameContentPane.add(deleteCustomerButton);
-		frameContentPane.add(customersTable);
-		frameContentPane.add(bankAccountsTable);
-		
-		JButton addBankAccountButton = new JButton("Add");
-		springLayout.putConstraint(SpringLayout.NORTH, addBankAccountButton, 509, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, bankAccountsTable, -6, SpringLayout.NORTH, addBankAccountButton);
-		springLayout.putConstraint(SpringLayout.WEST, addBankAccountButton, 411, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, changeCustomerButton, -37, SpringLayout.WEST, addBankAccountButton);
 		frameContentPane.add(addBankAccountButton);
-		
-		JButton deleteBankAccountButton = new JButton("Delete");
-		springLayout.putConstraint(SpringLayout.WEST, bankAccountsLabel, 0, SpringLayout.WEST, deleteBankAccountButton);
-		springLayout.putConstraint(SpringLayout.NORTH, deleteBankAccountButton, 6, SpringLayout.SOUTH, bankAccountsTable);
-		springLayout.putConstraint(SpringLayout.WEST, deleteBankAccountButton, 521, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, addBankAccountButton, -5, SpringLayout.WEST, deleteBankAccountButton);
 		frameContentPane.add(deleteBankAccountButton);
-		
-		JButton changeBankAccountButton = new JButton("Change");
-		springLayout.putConstraint(SpringLayout.NORTH, changeBankAccountButton, 6, SpringLayout.SOUTH, bankAccountsTable);
-		springLayout.putConstraint(SpringLayout.WEST, changeBankAccountButton, 633, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, deleteBankAccountButton, -7, SpringLayout.WEST, changeBankAccountButton);
-		springLayout.putConstraint(SpringLayout.EAST, changeBankAccountButton, -46, SpringLayout.EAST, frame.getContentPane());
 		frameContentPane.add(changeBankAccountButton);
+		frameContentPane.add(customersTableScrollPane);
+		frameContentPane.add(bankAccountsTable);
 	}
 
-	private void putConstraints() {
+	private void setBounds() {
+		customersTableScrollPane.setBounds(47, 58, 405, 244);
 	}
 }
