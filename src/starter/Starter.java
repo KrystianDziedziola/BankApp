@@ -6,6 +6,7 @@ import java.util.List;
 
 import businessLogic.ConnectionWindowManager;
 import businessLogic.CustomerManager;
+import businessLogic.ManageWindowManager;
 import dataLayer.Address;
 import dataLayer.Customer;
 
@@ -18,9 +19,11 @@ public class Starter {
 	public Starter() {		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-					new ConnectionWindowManager().show();
+//				new ConnectionWindowManager().show();
+				new ManageWindowManager().show();
 			}
 		});
+		
 		
 		/*CustomerManager customerManager = new CustomerManager();
 		try {
