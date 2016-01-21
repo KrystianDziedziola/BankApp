@@ -10,11 +10,13 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.Font;
+import java.awt.event.ActionListener;
+
 import javax.swing.JScrollPane;
 
 public class ManageWindow {
 
-	private final Dimension frameSize = new Dimension(800, 600);
+	private final Dimension frameSize = new Dimension(800, 400);
 	
 	private JFrame frame;
 	private Container frameContentPane;
@@ -29,6 +31,10 @@ public class ManageWindow {
 	private JButton addBankAccountButton;
 	private JButton deleteBankAccountButton;
 	private JButton changeBankAccountButton;
+	
+	private JButton addAddressButton;
+	private JButton deleteAddressButton;
+	private JButton changeAddressButton;
 	
 	private JScrollPane customersTableScrollPane;
 	private DefaultTableModel customersTableModel;
@@ -56,6 +62,30 @@ public class ManageWindow {
 		for(int rowIndex = 0; rowIndex < allCustomersInfoForTable.length; rowIndex++) {
 			customersTableModel.addRow(allCustomersInfoForTable[rowIndex]);
 		}
+	}
+	
+	public void addAddCustomerButtonListener(ActionListener actionListener) {
+		addCustomerButton.addActionListener(actionListener);
+	}
+	
+	public void displayAddCustomerDialog() {
+		System.out.println("Add customer");
+	}
+	
+	public void addChangeCustomerButtonListener(ActionListener actionListener) {
+		changeCustomerButton.addActionListener(actionListener);
+	}
+	
+	public void displayChangeCustomerDialog() {
+		System.out.println("Change customer");
+	}
+	
+	public void addDeleteCustomerButtonListener(ActionListener actionListener) {
+		deleteCustomerButton.addActionListener(actionListener);
+	}
+	
+	public void displayDeleteCustomerDialog() {
+		System.out.println("Delete customer");
 	}
 
 	private void initialize() {
@@ -94,79 +124,109 @@ public class ManageWindow {
 		addCustomerButton = new JButton("Add");
 		changeCustomerButton = new JButton("Change");
 		deleteCustomerButton = new JButton("Delete");
+		
 		addBankAccountButton = new JButton("Add");
-		deleteBankAccountButton = new JButton("Delete");
 		changeBankAccountButton = new JButton("Change");
+		deleteBankAccountButton = new JButton("Delete");
+		
+		addAddressButton = new JButton("Add");
+		changeAddressButton = new JButton("Change");
+		deleteAddressButton = new JButton("Delete");
 	}
 	
 	private void initializeTables() {
 		initializeCustomersTable();
 		initializeBankAccountsTable();
-		
-		
-		String[] addressesTableColumnNames = {"STREET", "CITY", "POSTCODE"};
-		int initialNumberOfRows = 0;
-		addressesTableModel = new DefaultTableModel(initialNumberOfRows, addressesTableColumnNames.length);
-		addressesTableModel.setColumnIdentifiers(addressesTableColumnNames);
-		addressesTable = new JTable(addressesTableModel);
-		addressTableScrollPane = new JScrollPane();
-		addressTableScrollPane.add(addressesTable);
-		addressTableScrollPane.setViewportView(addressesTable);
+		initializeAddressTable();
 	}
 	
 	private void initializeCustomersTable() {
 		String[] customersTableColumnNames = {"ID", "NAME", "SURNAME", "PASSWORD"};
-		int initialNumberOfRows = 0;
-		customersTableModel = new DefaultTableModel(initialNumberOfRows, customersTableColumnNames.length);
-		customersTableModel.setColumnIdentifiers(customersTableColumnNames);
+		customersTableModel = getInitializedTableModel(customersTableColumnNames);
 		customersTable = new JTable(customersTableModel);
+		customersTable.setEnabled(false);
 		customersTableScrollPane = new JScrollPane();
-		customersTableScrollPane.add(customersTable);
-		customersTableScrollPane.setViewportView(customersTable);
+		initializeScrollPane(customersTableScrollPane, customersTable);
 	}
 	
 	private void initializeBankAccountsTable() {
 		String[] bankAccountsTableColumnNames = {"ACCOUNT NUMBER", "BALANCE"};
-		int initialNumberOfRows = 0;
-		bankAccountsTableModel = new DefaultTableModel(initialNumberOfRows, bankAccountsTableColumnNames.length);
-		bankAccountsTableModel.setColumnIdentifiers(bankAccountsTableColumnNames);
+		bankAccountsTableModel = getInitializedTableModel(bankAccountsTableColumnNames);
 		bankAccountsTable = new JTable(bankAccountsTableModel);
+		bankAccountsTable.setEnabled(false);
 		bankAccountsTableScrollPane = new JScrollPane();
-		bankAccountsTableScrollPane.add(bankAccountsTable);
-		bankAccountsTableScrollPane.setViewportView(bankAccountsTable);
+		initializeScrollPane(bankAccountsTableScrollPane, bankAccountsTable);
+	}
+	
+	private void initializeAddressTable() {
+		String[] addressesTableColumnNames = {"STREET", "CITY", "POSTCODE"};
+		addressesTableModel = getInitializedTableModel(addressesTableColumnNames);
+		addressesTable = new JTable(addressesTableModel);
+		addressesTable.setEnabled(false);
+		addressTableScrollPane = new JScrollPane();
+		initializeScrollPane(addressTableScrollPane, addressesTable);
+	}
+	
+	private DefaultTableModel getInitializedTableModel(String[] columnNames) {
+		int initialNumberOfRows = 0;
+		DefaultTableModel tableModel = new DefaultTableModel(initialNumberOfRows, columnNames.length);
+		tableModel.setColumnIdentifiers(columnNames);
+		return tableModel; 
+	}
+	
+	private void initializeScrollPane(JScrollPane scrollPane, JTable table ) {
+		scrollPane.add(table);
+		scrollPane.setViewportView(table);
 	}
 	
 	private void addComponentsToFrame() {
 		setBounds();
+		addLabels();
+		addButtons();
+		addScrollPanes();
+	}
+
+	private void addLabels() {
 		frameContentPane.add(cutomersLabel);
 		frameContentPane.add(bankAccountsLabel);
+		frameContentPane.add(addressLabel);
+	}
+	
+	private void addButtons() {
 		frameContentPane.add(addCustomerButton);
 		frameContentPane.add(changeCustomerButton);
 		frameContentPane.add(deleteCustomerButton);
 		frameContentPane.add(addBankAccountButton);
 		frameContentPane.add(deleteBankAccountButton);
 		frameContentPane.add(changeBankAccountButton);
+		frameContentPane.add(addAddressButton);
+		frameContentPane.add(deleteAddressButton);
+		frameContentPane.add(changeAddressButton);
+	}
+	
+	private void addScrollPanes() {
 		frameContentPane.add(customersTableScrollPane);
 		frameContentPane.add(bankAccountsTableScrollPane);
 		frameContentPane.add(addressTableScrollPane);
-		
-		
-		addressLabel.setBounds(539, 31, 168, 14);
-		frame.getContentPane().add(addressLabel);
 	}
-
+	
 	private void setBounds() {
 		//code auto-generated by Window Designer
 		cutomersLabel.setBounds(206, 30, 75, 17);
-		bankAccountsLabel.setBounds(516, 118, 191, 17);
+		bankAccountsLabel.setBounds(516, 169, 191, 17);
 		addCustomerButton.setBounds(47, 313, 105, 23);
 		changeCustomerButton.setBounds(198, 313, 105, 23);
 		deleteCustomerButton.setBounds(347, 313, 105, 23);
 		addBankAccountButton.setBounds(478, 313, 80, 23);
 		deleteBankAccountButton.setBounds(664, 313, 80, 23);
-		changeBankAccountButton.setBounds(568, 313, 80, 23);
+		changeBankAccountButton.setBounds(568, 313, 86, 23);
 		customersTableScrollPane.setBounds(47, 58, 405, 244);
-		bankAccountsTableScrollPane.setBounds(478, 146, 264, 156);
+		bankAccountsTableScrollPane.setBounds(478, 197, 264, 105);
 		addressTableScrollPane.setBounds(478, 58, 264, 50);
+		addressLabel.setBounds(539, 31, 168, 14);
+		addAddressButton.setBounds(478, 119, 80, 23);
+		deleteAddressButton.setBounds(664, 119, 80, 23);
+		changeAddressButton.setBounds(568, 119, 86, 23);
 	}
+
 }
