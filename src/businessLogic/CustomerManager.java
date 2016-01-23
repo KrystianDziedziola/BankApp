@@ -13,8 +13,8 @@ public class CustomerManager {
 
 	private CustomerDaoInterface customerDao = new CustomerMySqlDao();
 	
-	public void connect(String login, String password) throws ClassNotFoundException, SQLException {
-			customerDao.connect(new LoginInformation(login, password));
+	public void connect(LoginInformation loginInformation) throws ClassNotFoundException, SQLException {
+			customerDao.connect(loginInformation);
 	}
 
 	public void add(long userId, String name, String surname, String password,

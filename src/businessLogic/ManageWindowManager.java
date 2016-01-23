@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import dataLayer.Converter;
+import dataLayer.LoginInformation;
 import presentationLayer.ManageWindow;
 
 public class ManageWindowManager {
@@ -12,7 +13,11 @@ public class ManageWindowManager {
 	private ManageWindow manageWindow = new ManageWindow();
 	private CustomerManager customerManager = new CustomerManager();
 	
-	public ManageWindowManager() {
+	private LoginInformation loginInformation;
+	
+	public ManageWindowManager(LoginInformation loginInformation) {
+		this.loginInformation = loginInformation;
+		
 		connectToDatabase();
 		sendCustomersInformationForTable();
 		
@@ -51,7 +56,7 @@ public class ManageWindowManager {
 	
 	private void connectToDatabase() {
 		try {
-			customerManager.connect("user", "logitech1");
+			customerManager.connect(loginInformation);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

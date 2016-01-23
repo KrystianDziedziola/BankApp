@@ -9,8 +9,8 @@ public class BankAccountManager {
 
 	private BankAccountDaoInterface bankAccountDao = new BankAccountMySqlDao();
 	
-	public void connect(String login, String password) throws Exception {
-		bankAccountDao.connect(new LoginInformation(login, password));
+	public void connect(LoginInformation loginInformation) throws Exception {
+		bankAccountDao.connect(loginInformation);
 	}
 
 	public void create(long accountNumber, int startingBalance, long userId) {

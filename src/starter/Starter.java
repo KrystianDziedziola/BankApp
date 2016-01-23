@@ -19,8 +19,8 @@ public class Starter {
 	public Starter() {		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-//				new ConnectionWindowManager().show();
-				new ManageWindowManager().show();
+				new ConnectionWindowManager().show();
+//				new ManageWindowManager().show();
 			}
 		});
 		

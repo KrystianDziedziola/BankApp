@@ -1,11 +1,13 @@
 package businessLogic;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import dataLayer.LoginInformation;
 import dataLayer.dao.MySqlDao;
 import presentationLayer.ConnectionWindow;
+import presentationLayer.ManageWindow;
 
 public class ConnectionWindowManager {
 	
@@ -31,14 +33,23 @@ public class ConnectionWindowManager {
 					connectionWindow.getLogin(), connectionWindow.getPassword());
 			try {
 				mySqlDao.connect(loginInformation);
-				//TODO: maybe change this a bit. Get Connection object and pass it to managers, so they don't have to connect separately 
 				connectionWindow.displayMessageDialog("Connected", "You've successfully connected to database.");
 				mySqlDao.closeConnection();
 				connectionWindow.close();
+				displayManageWindow(loginInformation);
 			} catch (Exception e) {
 				connectionWindow.displayMessageDialog("Connection error", "You've put wrong login information or MySql database server is not running.");
 			}
 		}
+
+		private void displayManageWindow(final LoginInformation loginInformation) {
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					new ManageWindowManager(loginInformation).show();
+				}
+			});
+		}
 		
 	}
+	
 }
