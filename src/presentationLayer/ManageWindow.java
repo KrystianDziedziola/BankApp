@@ -68,26 +68,14 @@ public class ManageWindow {
 		addCustomerButton.addActionListener(actionListener);
 	}
 	
-	public void displayAddCustomerDialog() {
-		System.out.println("Add customer");
-	}
-	
 	public void addChangeCustomerButtonListener(ActionListener actionListener) {
 		changeCustomerButton.addActionListener(actionListener);
-	}
-	
-	public void displayChangeCustomerDialog() {
-		System.out.println("Change customer");
 	}
 	
 	public void addDeleteCustomerButtonListener(ActionListener actionListener) {
 		deleteCustomerButton.addActionListener(actionListener);
 	}
 	
-	public void displayDeleteCustomerDialog() {
-		System.out.println("Delete customer");
-	}
-
 	private void initialize() {
 		initializeFrame();
 		initializeLabels();
@@ -100,6 +88,7 @@ public class ManageWindow {
 		frame = new JFrame("Bank App - Manage");
 		frameContentPane = frame.getContentPane();
 		frameContentPane.setLayout(null);
+		frame.setResizable(false);
 		frame.setSize(frameSize);
 		centerFrame(frame);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -144,7 +133,7 @@ public class ManageWindow {
 		String[] customersTableColumnNames = {"ID", "NAME", "SURNAME", "PASSWORD"};
 		customersTableModel = getInitializedTableModel(customersTableColumnNames);
 		customersTable = new JTable(customersTableModel);
-		customersTable.setEnabled(false);
+		//customersTable.setEnabled(false);
 		customersTableScrollPane = new JScrollPane();
 		initializeScrollPane(customersTableScrollPane, customersTable);
 	}

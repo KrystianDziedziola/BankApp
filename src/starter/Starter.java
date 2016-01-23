@@ -9,6 +9,7 @@ import businessLogic.CustomerManager;
 import businessLogic.ManageWindowManager;
 import dataLayer.Address;
 import dataLayer.Customer;
+import dataLayer.LoginInformation;
 
 public class Starter {
 
@@ -19,8 +20,8 @@ public class Starter {
 	public Starter() {		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new ConnectionWindowManager().show();
-//				new ManageWindowManager().show();
+//				new ConnectionWindowManager().show();
+				new ManageWindowManager(new LoginInformation("user", "logitech1")).show();
 			}
 		});
 		

@@ -10,6 +10,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JPasswordField;
 import javax.swing.JCheckBox;
 
@@ -35,21 +38,13 @@ public class CustomerInformationWindow {
 
 	private JCheckBox showPasswordCheckBox;
 	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CustomerInformationWindow window = new CustomerInformationWindow();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	public CustomerInformationWindow() {
 		initialize();
+	}
+	
+	public void show() {
+		frame.setVisible(true);
 	}
 
 	private void initialize() {
@@ -64,9 +59,10 @@ public class CustomerInformationWindow {
 	private void initializeFrame() {
 		frame = new JFrame("Customer");
 		frameContentPane = frame.getContentPane();
+		frame.setResizable(false);
 		frame.setSize(frameSize);
 		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frameContentPane.setLayout(null);
 	}
 	
@@ -91,14 +87,8 @@ public class CustomerInformationWindow {
 	
 	private void initializeInputFields() {
 		idTextField = new JTextField();
-		idTextField.setColumns(10);
-		
 		nameTextField = new JTextField();
-		nameTextField.setColumns(10);
-		
 		surnameTextField = new JTextField();
-		surnameTextField.setColumns(10);
-		
 		passwordField = new JPasswordField();
 	}
 	
@@ -110,8 +100,23 @@ public class CustomerInformationWindow {
 	private void initializeCheckBox() {
 		showPasswordCheckBox = new JCheckBox("Show password");
 		showPasswordCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		defineShowPasswordCheckBoxAction();
 	}
 	
+	private void defineShowPasswordCheckBoxAction() {
+		showPasswordCheckBox.addActionListener(new ActionListener() {
+			private char defaultEchoChar = passwordField.getEchoChar();
+			public void actionPerformed(ActionEvent arg0) {
+				if(showPasswordCheckBox.isSelected()) {
+					passwordField.setEchoChar((char)0);
+				} else {
+					passwordField.setEchoChar(defaultEchoChar);
+				}
+			}
+			
+		});
+	}
+
 	private void addComponents() {
 		setBounds();
 		frameContentPane.add(idLabel);
