@@ -28,20 +28,17 @@ public class Starter {
 		
 		/*CustomerManager customerManager = new CustomerManager();
 		try {
-			customerManager.connect("user", "logitech1");
+			customerManager.connect(new LoginInformation("user", "logitech1"));
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		List<Customer> allCustomers = customerManager.getAllCustomersList();
-		
-		
 		for(Customer customer:allCustomers) {
 			System.out.println(customer);
 		}*/
 	}	
 	
-	
-
 }

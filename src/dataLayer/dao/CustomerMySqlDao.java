@@ -12,7 +12,9 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 
 	public void create(Customer customer) {
 		saveCustomerInfo(customer);
-		saveCustomerAddress(customer);
+		if(customer.getAddress() != null) {
+			saveCustomerAddress(customer);
+		}
 	}
 
 	public Customer find(long customerId) {

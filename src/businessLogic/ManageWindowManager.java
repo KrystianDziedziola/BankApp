@@ -1,13 +1,11 @@
 package businessLogic;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import dataLayer.Converter;
 import dataLayer.LoginInformation;
-import presentationLayer.CustomerInformationWindow;
 import presentationLayer.ManageWindow;
 
 public class ManageWindowManager {
@@ -15,17 +13,21 @@ public class ManageWindowManager {
 	private ManageWindow manageWindow = new ManageWindow();
 	private CustomerManager customerManager = new CustomerManager();
 	
+	private CustomerInformationWindowManager customerInformationWindowManager = 
+		     new CustomerInformationWindowManager(customerManager);
+	
 	private LoginInformation loginInformation;
 	
 	public ManageWindowManager(LoginInformation loginInformation) {
 		this.loginInformation = loginInformation;
 		
 		connectToDatabase();
-		sendCustomersInformationForTable();
+		fillCustomersTable();
 		
 		defineAddCustomerButtonAction();
 		defineChangeCustomerButtonAction();
 		defineDeleteCustomerButtonAction();
+		defineCustomerInformationWindowAcceptButtonAction();
 	}
 	
 	public void show() {
@@ -43,6 +45,7 @@ public class ManageWindowManager {
 	public void defineDeleteCustomerButtonAction() {
 		manageWindow.addDeleteCustomerButtonListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//delete
 			}
 		});
 	}
@@ -57,30 +60,29 @@ public class ManageWindowManager {
 		}
 	}
 	
-	private void sendCustomersInformationForTable() {
-		String[][] allCustomersInfoForTable = Converter.convertListToStringArray(
-												customerManager.getAllCustomersList());
-		manageWindow.putCustomersInfoIntoTable(allCustomersInfoForTable);
+	private void defineCustomerInformationWindowAcceptButtonAction() {
+		customerInformationWindowManager.addAcceptButtonActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				customerInformationWindowManager.defineAcceptButtonAction();
+				fillCustomersTable();
+			}
+			
+		});
 	}
 	
 	private class ModifyCustomerButtonActionListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			showCustomerInformationWindow();
-		}
-
-		private void showCustomerInformationWindow() {
-			EventQueue.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						new CustomerInformationWindow().show();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
+			customerInformationWindowManager.show();
 		}
 		
 	}
-
+	
+	private void fillCustomersTable() {
+		String[][] allCustomersInfoForTable = Converter.convertListToStringArray(
+												customerManager.getAllCustomersList());
+		manageWindow.updateCustomersTable(allCustomersInfoForTable);
+	}
+	
 }

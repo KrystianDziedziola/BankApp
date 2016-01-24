@@ -24,6 +24,11 @@ public class CustomerManager {
 		customerDao.create(customer);
 	}
 	
+	public void add(long userId, String name, String surname, String password) {
+		Customer customer = new Customer(userId, name, surname, password, null);
+		customerDao.create(customer);
+	}
+	
 	public Customer findById(long customerId) {
 		return customerDao.find(customerId);
 	}

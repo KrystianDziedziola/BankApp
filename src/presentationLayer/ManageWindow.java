@@ -58,10 +58,9 @@ public class ManageWindow {
 		frame.setVisible(true);
 	}
 	
-	public void putCustomersInfoIntoTable(String[][] allCustomersInfoForTable) {
-		for(int rowIndex = 0; rowIndex < allCustomersInfoForTable.length; rowIndex++) {
-			customersTableModel.addRow(allCustomersInfoForTable[rowIndex]);
-		}
+	public void updateCustomersTable(String[][] allCustomersInfoForTable) {
+		clearCustomersTable();
+		addContentToCustomersTable(allCustomersInfoForTable);
 	}
 	
 	public void addAddCustomerButtonListener(ActionListener actionListener) {
@@ -74,6 +73,10 @@ public class ManageWindow {
 	
 	public void addDeleteCustomerButtonListener(ActionListener actionListener) {
 		deleteCustomerButton.addActionListener(actionListener);
+	}
+	
+	public void addCustomerWindowAcceptButtonListener(ActionListener actionListener) {
+		
 	}
 	
 	private void initialize() {
@@ -197,6 +200,18 @@ public class ManageWindow {
 		frameContentPane.add(customersTableScrollPane);
 		frameContentPane.add(bankAccountsTableScrollPane);
 		frameContentPane.add(addressTableScrollPane);
+	}
+	
+	private void clearCustomersTable() {
+		for(int rowNumber = customersTableModel.getRowCount() - 1; rowNumber >= 0; rowNumber--) {
+			customersTableModel.removeRow(rowNumber);
+		}
+	}
+	
+	private void addContentToCustomersTable(String[][] allCustomersInfoForTable) {
+		for(int rowIndex = 0; rowIndex < allCustomersInfoForTable.length; rowIndex++) {
+			customersTableModel.addRow(allCustomersInfoForTable[rowIndex]);
+		}
 	}
 	
 	private void setBounds() {
