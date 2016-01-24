@@ -92,7 +92,7 @@ public class CustomerInformationWindow {
 		customerInfoList.add(idTextField.getText());
 		customerInfoList.add(nameTextField.getText());
 		customerInfoList.add(surnameTextField.getText());
-		customerInfoList.add(passwordField.getText());
+		customerInfoList.add(String.valueOf(passwordField.getPassword()));
 		return customerInfoList;
 	}
 

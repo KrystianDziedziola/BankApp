@@ -1,4 +1,4 @@
-package businessLogic;
+package businessLogic.dataManagers;
 
 import dataLayer.BankAccount;
 import dataLayer.LoginInformation;

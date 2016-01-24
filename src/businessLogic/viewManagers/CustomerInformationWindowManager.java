@@ -1,10 +1,11 @@
-package businessLogic;
+package businessLogic.viewManagers;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import businessLogic.dataManagers.CustomerManager;
 import presentationLayer.CustomerInformationWindow;
 
 public class CustomerInformationWindowManager {
@@ -37,7 +38,7 @@ public class CustomerInformationWindowManager {
 	}
 	
 	public void defineAcceptButtonAction() {
-		addCustomerToDatabase(customerInformationWindow.getCustomerInformation());
+		addCustomerToDatabase(customerInformationWindow.getCustomerInformation()); //TODO: add exceptions
 		customerInformationWindow.clear();
 		customerInformationWindow.close();
 	}

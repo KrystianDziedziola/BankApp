@@ -1,9 +1,10 @@
-package businessLogic;
+package businessLogic.viewManagers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
+import businessLogic.dataManagers.CustomerManager;
 import dataLayer.Converter;
 import dataLayer.LoginInformation;
 import presentationLayer.ManageWindow;
@@ -65,8 +66,8 @@ public class ManageWindowManager {
 
 			public void actionPerformed(ActionEvent arg0) {
 				customerInformationWindowManager.defineAcceptButtonAction();
-				fillCustomersTable();
-			}
+				fillCustomersTable();									//TODO: maybe change this to adding only one row
+			}															//instead of clearing and filling everything
 			
 		});
 	}

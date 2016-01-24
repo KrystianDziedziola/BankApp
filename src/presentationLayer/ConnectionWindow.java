@@ -49,7 +49,7 @@ public class ConnectionWindow {
 	}
 	
 	public String getPassword() {
-		return passwordField.getText(); //FIXME: maybe I will
+		return String.valueOf(passwordField.getPassword());
 	}
 	
 	public void displayMessageDialog(String title, String message) {

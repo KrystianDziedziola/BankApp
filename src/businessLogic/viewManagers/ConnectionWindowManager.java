@@ -1,4 +1,4 @@
-package businessLogic;
+package businessLogic.viewManagers;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import dataLayer.LoginInformation;
 import dataLayer.dao.MySqlDao;
 import presentationLayer.ConnectionWindow;
-import presentationLayer.ManageWindow;
 
 public class ConnectionWindowManager {
 	

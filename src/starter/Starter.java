@@ -4,9 +4,9 @@ import java.awt.EventQueue;
 import java.sql.SQLException;
 import java.util.List;
 
-import businessLogic.ConnectionWindowManager;
-import businessLogic.CustomerManager;
-import businessLogic.ManageWindowManager;
+import businessLogic.dataManagers.CustomerManager;
+import businessLogic.viewManagers.ConnectionWindowManager;
+import businessLogic.viewManagers.ManageWindowManager;
 import dataLayer.Address;
 import dataLayer.Customer;
 import dataLayer.LoginInformation;
