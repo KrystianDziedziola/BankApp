@@ -13,11 +13,15 @@ public class Customer {
 	private Address address;
 	private ArrayList<BankAccount> bankAccounts = new ArrayList<BankAccount>();
 	
-	public Customer(long userIdRef, String nameRef, String surnameRef, String passwordRef, Address addressRef) {
+	public Customer(long userIdRef, String nameRef, String surnameRef, String passwordRef) {
 		userId = userIdRef;
 		name = nameRef;
 		surname = surnameRef;
 		password = passwordRef;
+	}
+	
+	public Customer(long userIdRef, String nameRef, String surnameRef, String passwordRef, Address addressRef) {
+		this(userIdRef, nameRef, surnameRef, passwordRef);
 		address = addressRef;
 	}
 	

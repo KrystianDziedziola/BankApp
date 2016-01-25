@@ -9,8 +9,11 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 
@@ -75,10 +78,29 @@ public class ManageWindow {
 		deleteCustomerButton.addActionListener(actionListener);
 	}
 	
-	public void addCustomerWindowAcceptButtonListener(ActionListener actionListener) {
-		
+	public void addCustomersTableSelectionListener(ListSelectionListener listSelectionListener) {
+		customersTable.getSelectionModel().addListSelectionListener(listSelectionListener);
 	}
 	
+	public ArrayList<String> getCustomersTableSelectedRow() {
+		ArrayList<String> customerInfo = new ArrayList<String>();
+		int selectedRowIndex = customersTable.getSelectedRow();
+		int numberOfColumns = customersTableModel.getColumnCount();
+		
+		for(int columnId = 0; columnId < numberOfColumns; columnId++) {
+			customerInfo.add((String) customersTable.getValueAt(selectedRowIndex, columnId));
+		}
+		return customerInfo;
+	}
+	
+	public boolean isChangeCustomerButtonEnabled() {
+		return changeCustomerButton.isEnabled();
+	}
+	
+	public void setChangeCustomerButtonEnabled(boolean isEnabled) {
+		changeCustomerButton.setEnabled(isEnabled);
+	}
+
 	private void initialize() {
 		initializeFrame();
 		initializeLabels();
@@ -113,19 +135,30 @@ public class ManageWindow {
 	}
 	
 	private void initializeButtons() {
+		initializeCustomerButtons();
+		initializeBankAccountButtons();
+		initializeAddressButtons();
+	}
+	
+	private void initializeCustomerButtons() {
 		addCustomerButton = new JButton("Add");
 		changeCustomerButton = new JButton("Change");
+		changeCustomerButton.setEnabled(false);
 		deleteCustomerButton = new JButton("Delete");
-		
+	}
+	
+	private void initializeBankAccountButtons() {
 		addBankAccountButton = new JButton("Add");
 		changeBankAccountButton = new JButton("Change");
 		deleteBankAccountButton = new JButton("Delete");
-		
+	}
+	
+	private void initializeAddressButtons() {
 		addAddressButton = new JButton("Add");
 		changeAddressButton = new JButton("Change");
 		deleteAddressButton = new JButton("Delete");
 	}
-	
+
 	private void initializeTables() {
 		initializeCustomersTable();
 		initializeBankAccountsTable();

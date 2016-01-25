@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Converter {
 
-	static public String[][] convertListToStringArray(ArrayList<Customer> allCustomersList) {
+	static public String[][] convertCustomersListToTwoDimensionalStringArray(ArrayList<Customer> allCustomersList) {
 		int numberOfCustomers = allCustomersList.size();
 		int numberOfColumns = 4;
 		String[][] allCustomersInfoForTable = new String[numberOfCustomers][numberOfColumns];
@@ -17,5 +17,14 @@ public class Converter {
 			allCustomersInfoForTable[customerIndex][columnIndex++] = customer.getPassword();
 		}
 		return allCustomersInfoForTable;
+	}
+	
+	static public Customer convertStringListToCustomerObject(ArrayList<String> customerInfo) {
+		return new Customer(
+			Long.parseLong(customerInfo.get(CustomerInfoIndex.ID)),
+			customerInfo.get(CustomerInfoIndex.NAME),
+			customerInfo.get(CustomerInfoIndex.SURNAME),
+			customerInfo.get(CustomerInfoIndex.PASSWORD)
+		);
 	}
 }

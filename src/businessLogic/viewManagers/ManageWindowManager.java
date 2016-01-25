@@ -4,8 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import businessLogic.dataManagers.CustomerManager;
 import dataLayer.Converter;
+import dataLayer.Customer;
 import dataLayer.LoginInformation;
 import presentationLayer.ManageWindow;
 
@@ -19,6 +23,8 @@ public class ManageWindowManager {
 	
 	private LoginInformation loginInformation;
 	
+	private Customer currentlySelectedCustomer;
+	
 	public ManageWindowManager(LoginInformation loginInformation) {
 		this.loginInformation = loginInformation;
 		
@@ -29,25 +35,47 @@ public class ManageWindowManager {
 		defineChangeCustomerButtonAction();
 		defineDeleteCustomerButtonAction();
 		defineCustomerInformationWindowAcceptButtonAction();
+		defineCustomersTableSelectAction();
 	}
 	
 	public void show() {
 		manageWindow.show();
 	}
 	
-	public void defineAddCustomerButtonAction() {
+	private void defineAddCustomerButtonAction() {
 		manageWindow.addAddCustomerButtonListener(new ModifyCustomerButtonActionListener());
 	}
 	
-	public void defineChangeCustomerButtonAction() {
+	private void defineChangeCustomerButtonAction() {
 		manageWindow.addChangeCustomerButtonListener(new ModifyCustomerButtonActionListener());
 	}
 	
-	public void defineDeleteCustomerButtonAction() {
+	private void defineDeleteCustomerButtonAction() {
 		manageWindow.addDeleteCustomerButtonListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//delete
 			}
+		});
+	}
+	
+	private void defineCustomersTableSelectAction() {
+		manageWindow.addCustomersTableSelectionListener(new ListSelectionListener() {
+
+			public void valueChanged(ListSelectionEvent event) {
+				if(event.getValueIsAdjusting()) {
+					currentlySelectedCustomer = Converter.convertStringListToCustomerObject(
+							manageWindow.getCustomersTableSelectedRow());
+					System.out.println(currentlySelectedCustomer);
+				}
+				enableChangeCustomerButtonAfterRowSelection();
+			}
+
+			private void enableChangeCustomerButtonAfterRowSelection() {
+				if(!manageWindow.isChangeCustomerButtonEnabled()) {
+					manageWindow.setChangeCustomerButtonEnabled(true);
+				}
+			}
+			
 		});
 	}
 	
@@ -81,7 +109,7 @@ public class ManageWindowManager {
 	}
 	
 	private void fillCustomersTable() {
-		String[][] allCustomersInfoForTable = Converter.convertListToStringArray(
+		String[][] allCustomersInfoForTable = Converter.convertCustomersListToTwoDimensionalStringArray(
 												customerManager.getAllCustomersList());
 		manageWindow.updateCustomersTable(allCustomersInfoForTable);
 	}

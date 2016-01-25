@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import businessLogic.dataManagers.CustomerManager;
+import dataLayer.CustomerInfoIndex;
 import presentationLayer.CustomerInformationWindow;
 
 public class CustomerInformationWindowManager {
@@ -44,11 +45,11 @@ public class CustomerInformationWindowManager {
 	}
 
 	private void addCustomerToDatabase(ArrayList<String> customerInfoList) {
-		int id = 0, name = 1, surname = 2, password = 3;
-		customerManager.add(Long.parseLong(customerInfoList.get(id)),
-				customerInfoList.get(name),
-				customerInfoList.get(surname),
-				customerInfoList.get(password)
+		customerManager.add(
+				Long.parseLong(customerInfoList.get(CustomerInfoIndex.ID)),
+				customerInfoList.get(CustomerInfoIndex.NAME),
+				customerInfoList.get(CustomerInfoIndex.SURNAME),
+				customerInfoList.get(CustomerInfoIndex.PASSWORD)
 		);
 	}
 	
