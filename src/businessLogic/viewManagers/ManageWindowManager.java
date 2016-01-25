@@ -53,7 +53,8 @@ public class ManageWindowManager {
 	private void defineDeleteCustomerButtonAction() {
 		manageWindow.addDeleteCustomerButtonListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//delete
+				customerManager.deleteCustomerById(currentlySelectedCustomer.getUserId());
+				fillCustomersTable();
 			}
 		});
 	}
@@ -65,7 +66,6 @@ public class ManageWindowManager {
 				if(event.getValueIsAdjusting()) {
 					currentlySelectedCustomer = Converter.convertStringListToCustomerObject(
 							manageWindow.getCustomersTableSelectedRow());
-					System.out.println(currentlySelectedCustomer);
 				}
 				enableChangeCustomerButtonAfterRowSelection();
 			}
