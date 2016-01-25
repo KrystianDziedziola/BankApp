@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -15,6 +16,7 @@ import presentationLayer.ManageWindow;
 
 public class ManageWindowManager {
 
+	protected static final int YES_CANCEL_OPTION = 0;
 	private ManageWindow manageWindow = new ManageWindow();
 	private CustomerManager customerManager = new CustomerManager();
 	
@@ -53,8 +55,25 @@ public class ManageWindowManager {
 	private void defineDeleteCustomerButtonAction() {
 		manageWindow.addDeleteCustomerButtonListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				customerManager.deleteCustomerById(currentlySelectedCustomer.getUserId());
-				fillCustomersTable();
+				if(isDeletingAccepted()) {
+					customerManager.deleteCustomerById(currentlySelectedCustomer.getUserId());
+					fillCustomersTable();
+				}
+			}
+
+			private boolean isDeletingAccepted() {
+				final int YES_BUTTON_ID = 0;
+				if(getAnswer() == YES_BUTTON_ID) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			private int getAnswer() {
+				return JOptionPane.showConfirmDialog(manageWindow.getFrame(), 
+						"Are you sure that you want to delete this customer?", 
+						"Delete", YES_CANCEL_OPTION);
 			}
 		});
 	}
@@ -67,12 +86,16 @@ public class ManageWindowManager {
 					currentlySelectedCustomer = Converter.convertStringListToCustomerObject(
 							manageWindow.getCustomersTableSelectedRow());
 				}
-				enableChangeCustomerButtonAfterRowSelection();
+				enableChangeAndDeleteCustomerButtonAfterRowSelection();
 			}
 
-			private void enableChangeCustomerButtonAfterRowSelection() {
-				if(!manageWindow.isChangeCustomerButtonEnabled()) {
+			private void enableChangeAndDeleteCustomerButtonAfterRowSelection() {
+				if(manageWindow.isAnyRowInCustomersTableSelected()) {
 					manageWindow.setChangeCustomerButtonEnabled(true);
+					manageWindow.setDeleteCustomerButtonEnabler(true);
+				} else {
+					manageWindow.setChangeCustomerButtonEnabled(false);
+					manageWindow.setDeleteCustomerButtonEnabler(false);
 				}
 			}
 			

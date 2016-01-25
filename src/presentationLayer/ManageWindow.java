@@ -1,5 +1,6 @@
 package presentationLayer;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 
@@ -93,12 +94,28 @@ public class ManageWindow {
 		return customerInfo;
 	}
 	
-	public boolean isChangeCustomerButtonEnabled() {
+	/*public boolean isChangeCustomerButtonEnabled() {
 		return changeCustomerButton.isEnabled();
-	}
+	}*/
 	
 	public void setChangeCustomerButtonEnabled(boolean isEnabled) {
 		changeCustomerButton.setEnabled(isEnabled);
+	}
+	
+	public void setDeleteCustomerButtonEnabler(boolean isEnabled) {
+		deleteCustomerButton.setEnabled(isEnabled);
+	}
+	
+	public Component getFrame() {
+		return frame;
+	}
+	
+	public boolean isAnyRowInCustomersTableSelected() {
+		if(customersTable.getSelectedRow() == -1) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	private void initialize() {
@@ -145,6 +162,7 @@ public class ManageWindow {
 		changeCustomerButton = new JButton("Change");
 		changeCustomerButton.setEnabled(false);
 		deleteCustomerButton = new JButton("Delete");
+		deleteCustomerButton.setEnabled(false);
 	}
 	
 	private void initializeBankAccountButtons() {
