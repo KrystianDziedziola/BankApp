@@ -10,7 +10,7 @@ import dataLayer.Customer;
 
 public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 
-	public void create(Customer customer) {
+	public void create(Customer customer) throws SQLException {
 		saveCustomerInfo(customer);
 		if(customer.getAddress() != null) {
 			saveCustomerAddress(customer);
@@ -64,14 +64,10 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 		return null;
 	}
 	
-	private void saveCustomerInfo(Customer customer) {
-		try {
-			PreparedStatement preparedStatement = connection.prepareStatement(
-					"INSERT INTO "+ databaseName + ".customers VALUES (?, ?, ?, ?)");
-			setCustomerInfo(preparedStatement, customer);		
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	private void saveCustomerInfo(Customer customer) throws SQLException {
+		PreparedStatement preparedStatement = connection.prepareStatement(
+			"INSERT INTO "+ databaseName + ".customers VALUES (?, ?, ?, ?)");
+		setCustomerInfo(preparedStatement, customer);		
 	}
 
 	private void setCustomerInfo(PreparedStatement preparedStatement, Customer customer) throws SQLException {

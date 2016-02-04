@@ -3,7 +3,12 @@ package businessLogic.viewManagers;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 import businessLogic.dataManagers.CustomerManager;
 import dataLayer.CustomerInfoIndex;
@@ -20,6 +25,7 @@ public class CustomerInformationWindowManager {
 		
 		defineCancelButtonAction();
 		defineShowPasswordCheckBoxAction();
+		defineFrameExitButtonAction();
 	}
 	
 	public void show() {
@@ -39,12 +45,24 @@ public class CustomerInformationWindowManager {
 	}
 	
 	public void defineAcceptButtonAction() {
-		addCustomerToDatabase(customerInformationWindow.getCustomerInformation()); //TODO: add exceptions
-		customerInformationWindow.clear();
-		customerInformationWindow.close();
+		try {
+			addCustomerToDatabase(customerInformationWindow.getCustomerInformation());
+			customerInformationWindow.clear();
+			customerInformationWindow.close();
+		} catch(NumberFormatException e) {
+			showInfoDialog("ID has to be a number.");
+		} catch(SQLException e) {
+			showInfoDialog("Customer with this ID already exists. Please choose another one.");
+		}
+		
 	}
 
-	private void addCustomerToDatabase(ArrayList<String> customerInfoList) {
+	private void showInfoDialog(String message) {
+		JOptionPane.showMessageDialog(customerInformationWindow.getFrame(), message);
+	}
+
+	private void addCustomerToDatabase(ArrayList<String> customerInfoList) 
+			throws NumberFormatException, SQLException {
 		customerManager.add(
 				Long.parseLong(customerInfoList.get(CustomerInfoIndex.ID)),
 				customerInfoList.get(CustomerInfoIndex.NAME),
@@ -78,6 +96,19 @@ public class CustomerInformationWindowManager {
 			}
 			
 		});
+	}
+	
+	private void defineFrameExitButtonAction() {
+		customerInformationWindow.addWindowListenerToFrame(new ExitButtonListener());
+	}
+	
+	private class ExitButtonListener extends WindowAdapter {
+		
+		@Override
+		public void windowClosing(WindowEvent windowEvent) {
+			customerInformationWindow.clear();
+			customerInformationWindow.close();
+		}
 	}
 
 }

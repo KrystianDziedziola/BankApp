@@ -10,7 +10,6 @@ import java.sql.Statement;
 import dataLayer.LoginInformation;
 
 public class MySqlDao {
-	//this variables should be local in functions
 	protected Connection connection;
 	protected Statement statement;
 	protected PreparedStatement preparedStatement;

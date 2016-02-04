@@ -14,6 +14,7 @@ import javax.swing.event.ListSelectionListener;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
@@ -65,6 +66,10 @@ public class ManageWindow {
 	public void updateCustomersTable(String[][] allCustomersInfoForTable) {
 		clearCustomersTable();
 		addContentToCustomersTable(allCustomersInfoForTable);
+	}
+	
+	public void addWindowListenerToFrame(WindowListener windowListener) {
+		frame.addWindowListener(windowListener);
 	}
 	
 	public void addAddCustomerButtonListener(ActionListener actionListener) {
@@ -133,7 +138,7 @@ public class ManageWindow {
 		frame.setResizable(false);
 		frame.setSize(frameSize);
 		centerFrame(frame);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	}
 
 	private void centerFrame(JFrame frame) {

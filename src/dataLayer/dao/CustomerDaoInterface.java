@@ -9,7 +9,7 @@ import dataLayer.LoginInformation;
 public interface CustomerDaoInterface {
 	
 	public void connect(LoginInformation loginInformation) throws ClassNotFoundException, SQLException;
-	public void create(Customer customer);
+	public void create(Customer customer) throws SQLException;
 	public Customer find(long customerId);
 	public void delete(long customerId);
 	public void update(Customer customer);

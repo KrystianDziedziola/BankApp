@@ -1,5 +1,6 @@
 package presentationLayer;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 
@@ -11,6 +12,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 import javax.swing.JPasswordField;
@@ -71,6 +73,10 @@ public class CustomerInformationWindow {
 		showPasswordCheckBox.addActionListener(actionListener);
 	}
 	
+	public void addWindowListenerToFrame(WindowListener windowListener) {
+		frame.addWindowListener(windowListener);
+	}
+	
 	public Object getShowPasswordCheckBox() {
 		return showPasswordCheckBox;
 	}
@@ -95,6 +101,10 @@ public class CustomerInformationWindow {
 		customerInfoList.add(String.valueOf(passwordField.getPassword()));
 		return customerInfoList;
 	}
+	
+	public Component getFrame() {
+		return frame;
+	}
 
 	private void initialize() {
 		initializeFrame();
@@ -111,7 +121,7 @@ public class CustomerInformationWindow {
 		frame.setResizable(false);
 		frame.setSize(frameSize);
 		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frameContentPane.setLayout(null);
 	}
 	

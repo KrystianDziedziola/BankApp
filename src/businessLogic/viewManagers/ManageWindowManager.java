@@ -2,6 +2,8 @@ package businessLogic.viewManagers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
@@ -33,6 +35,7 @@ public class ManageWindowManager {
 		connectToDatabase();
 		fillCustomersTable();
 		
+		defineFrameExitButtonAction();
 		defineAddCustomerButtonAction();
 		defineChangeCustomerButtonAction();
 		defineDeleteCustomerButtonAction();
@@ -42,6 +45,10 @@ public class ManageWindowManager {
 	
 	public void show() {
 		manageWindow.show();
+	}
+	
+	private void defineFrameExitButtonAction() {
+		manageWindow.addWindowListenerToFrame(new ExitWindowListener());
 	}
 	
 	private void defineAddCustomerButtonAction() {
@@ -76,6 +83,12 @@ public class ManageWindowManager {
 						"Delete", YES_CANCEL_OPTION);
 			}
 		});
+	}
+	
+	private void fillCustomersTable() {
+		String[][] allCustomersInfoForTable = Converter.convertCustomersListToTwoDimensionalStringArray(
+												customerManager.getAllCustomersList());
+		manageWindow.updateCustomersTable(allCustomersInfoForTable);
 	}
 	
 	private void defineCustomersTableSelectAction() {
@@ -117,10 +130,30 @@ public class ManageWindowManager {
 
 			public void actionPerformed(ActionEvent arg0) {
 				customerInformationWindowManager.defineAcceptButtonAction();
-				fillCustomersTable();									//TODO: maybe change this to adding only one row
-			}															//instead of clearing and filling everything
+				fillCustomersTable();									
+			}															
 			
 		});
+	}
+	
+	private class ExitWindowListener extends WindowAdapter {
+		
+		@Override
+		public void windowClosing(WindowEvent windowEvent) {
+			if (isExitingConfirmedInDialog()){
+		       	customerManager.closeConnection();
+		       	System.exit(0);
+		    }
+		}
+
+		private boolean isExitingConfirmedInDialog() {
+			return getAnswerFromExitDialog() == JOptionPane.YES_OPTION ? true : false;
+		}
+
+		private int getAnswerFromExitDialog() {
+			return JOptionPane.showConfirmDialog(manageWindow.getFrame(), "Are you sure to close this window?",
+					"Exit Bank App", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		}
 	}
 	
 	private class ModifyCustomerButtonActionListener implements ActionListener {
@@ -129,12 +162,6 @@ public class ManageWindowManager {
 			customerInformationWindowManager.show();
 		}
 		
-	}
-	
-	private void fillCustomersTable() {
-		String[][] allCustomersInfoForTable = Converter.convertCustomersListToTwoDimensionalStringArray(
-												customerManager.getAllCustomersList());
-		manageWindow.updateCustomersTable(allCustomersInfoForTable);
 	}
 	
 }

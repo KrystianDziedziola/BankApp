@@ -3,6 +3,8 @@ package businessLogic.dataManagers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
+
 import dataLayer.Address;
 import dataLayer.Customer;
 import dataLayer.LoginInformation;
@@ -17,14 +19,15 @@ public class CustomerManager {
 			customerDao.connect(loginInformation);
 	}
 
-	public void add(long userId, String name, String surname, String password,
-							String street, String city, String postCode) {
+	public void add(long userId, String name, String surname, String password, String street, 
+			String city, String postCode) throws SQLException {
 		Address address = new Address(street, city, postCode);
 		Customer customer = new Customer(userId, name, surname, password, address);
 		customerDao.create(customer);
 	}
 	
-	public void add(long userId, String name, String surname, String password) {
+	public void add(long userId, String name, String surname, String password) 
+			throws SQLException {
 		Customer customer = new Customer(userId, name, surname, password, null);
 		customerDao.create(customer);
 	}
