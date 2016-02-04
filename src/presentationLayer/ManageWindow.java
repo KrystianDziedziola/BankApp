@@ -99,10 +99,6 @@ public class ManageWindow {
 		return customerInfo;
 	}
 	
-	/*public boolean isChangeCustomerButtonEnabled() {
-		return changeCustomerButton.isEnabled();
-	}*/
-	
 	public void setChangeCustomerButtonEnabled(boolean isEnabled) {
 		changeCustomerButton.setEnabled(isEnabled);
 	}

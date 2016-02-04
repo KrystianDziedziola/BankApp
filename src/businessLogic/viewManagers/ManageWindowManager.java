@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -22,8 +23,11 @@ public class ManageWindowManager {
 	private ManageWindow manageWindow = new ManageWindow();
 	private CustomerManager customerManager = new CustomerManager();
 	
-	private CustomerInformationWindowManager customerInformationWindowManager = 
+	private CustomerInformationWindowManager addCustomerInformationWindowManager = 
 		     new CustomerInformationWindowManager(customerManager);
+	
+	private CustomerInformationWindowManager changeCustomerInformationWindowManager = 
+		     new CustomerInformationWindowManager(customerManager, false);
 	
 	private LoginInformation loginInformation;
 	
@@ -40,6 +44,7 @@ public class ManageWindowManager {
 		defineChangeCustomerButtonAction();
 		defineDeleteCustomerButtonAction();
 		defineCustomerInformationWindowAcceptButtonAction();
+		defineCustomerInformationWindowChangeButtonAction();
 		defineCustomersTableSelectAction();
 	}
 	
@@ -47,16 +52,26 @@ public class ManageWindowManager {
 		manageWindow.show();
 	}
 	
+	private void connectToDatabase() {
+		try {
+			customerManager.connect(loginInformation);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void defineFrameExitButtonAction() {
 		manageWindow.addWindowListenerToFrame(new ExitWindowListener());
 	}
 	
 	private void defineAddCustomerButtonAction() {
-		manageWindow.addAddCustomerButtonListener(new ModifyCustomerButtonActionListener());
+		manageWindow.addAddCustomerButtonListener(new AddCustomerButtonActionListener());
 	}
 	
 	private void defineChangeCustomerButtonAction() {
-		manageWindow.addChangeCustomerButtonListener(new ModifyCustomerButtonActionListener());
+		manageWindow.addChangeCustomerButtonListener(new ChangeCustomerButtonActionListener());
 	}
 	
 	private void defineDeleteCustomerButtonAction() {
@@ -115,21 +130,22 @@ public class ManageWindowManager {
 		});
 	}
 	
-	private void connectToDatabase() {
-		try {
-			customerManager.connect(loginInformation);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	private void defineCustomerInformationWindowAcceptButtonAction() {
-		customerInformationWindowManager.addAcceptButtonActionListener(new ActionListener() {
+		addCustomerInformationWindowManager.addAcceptButtonActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				customerInformationWindowManager.defineAcceptButtonAction();
+				addCustomerInformationWindowManager.defineAcceptAddButtonAction();
+				fillCustomersTable();									
+			}															
+			
+		});
+	}
+	
+	private void defineCustomerInformationWindowChangeButtonAction() {
+		changeCustomerInformationWindowManager.addAcceptButtonActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				changeCustomerInformationWindowManager.defineAcceptChangeButtonAction();
 				fillCustomersTable();									
 			}															
 			
@@ -156,12 +172,23 @@ public class ManageWindowManager {
 		}
 	}
 	
-	private class ModifyCustomerButtonActionListener implements ActionListener {
+	private class AddCustomerButtonActionListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			customerInformationWindowManager.show();
+			addCustomerInformationWindowManager.show();
 		}
 		
+	}
+	
+	private class ChangeCustomerButtonActionListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent e) {
+			ArrayList<String> selectedCustomerInfo = manageWindow.getCustomersTableSelectedRow();
+			Customer selectedCustomer = Converter.convertStringListToCustomerObject(selectedCustomerInfo);
+			
+			changeCustomerInformationWindowManager.show(selectedCustomer);
+		}
+
 	}
 	
 }

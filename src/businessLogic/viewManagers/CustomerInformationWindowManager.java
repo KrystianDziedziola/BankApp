@@ -1,6 +1,5 @@
 package businessLogic.viewManagers;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -11,6 +10,8 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import businessLogic.dataManagers.CustomerManager;
+import dataLayer.Converter;
+import dataLayer.Customer;
 import dataLayer.CustomerInfoIndex;
 import presentationLayer.CustomerInformationWindow;
 
@@ -27,24 +28,25 @@ public class CustomerInformationWindowManager {
 		defineShowPasswordCheckBoxAction();
 		defineFrameExitButtonAction();
 	}
+	public CustomerInformationWindowManager(CustomerManager customerManager, boolean isIdFieldEditable) {
+		this(customerManager);
+		customerInformationWindow.setIdFieldEditable(isIdFieldEditable);
+	}
 	
 	public void show() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					customerInformationWindow.show();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		customerInformationWindow.show();
+
+	}
+	
+	public void show(Customer customer) {
+		customerInformationWindow.show(customer);
 	}
 	
 	public void addAcceptButtonActionListener(ActionListener actionListener) {
 		customerInformationWindow.addCustomerWindowAcceptButtonListener(actionListener);
 	}
 	
-	public void defineAcceptButtonAction() {
+	public void defineAcceptAddButtonAction() {
 		try {
 			addCustomerToDatabase(customerInformationWindow.getCustomerInformation());
 			customerInformationWindow.clear();
@@ -56,7 +58,15 @@ public class CustomerInformationWindowManager {
 		}
 		
 	}
-
+	
+	public void defineAcceptChangeButtonAction() {
+		ArrayList<String> customerInformation = customerInformationWindow.getCustomerInformation();
+		Customer customer = Converter.convertStringListToCustomerObject(customerInformation);
+		customerManager.update(customer);
+		customerInformationWindow.clear();
+		customerInformationWindow.close();
+	}
+	
 	private void showInfoDialog(String message) {
 		JOptionPane.showMessageDialog(customerInformationWindow.getFrame(), message);
 	}

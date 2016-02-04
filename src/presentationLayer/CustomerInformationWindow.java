@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import dataLayer.Customer;
+
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -49,6 +51,22 @@ public class CustomerInformationWindow {
 		frame.setVisible(true);
 	}
 	
+	public void show(Customer customer) {
+		fillInputBoxesWithCustomerInfo(customer);
+		show();
+	}
+	
+	public void setIdFieldEditable(boolean isIdFieldEditable) {
+		idTextField.setEditable(isIdFieldEditable);
+	}
+ 	
+	private void fillInputBoxesWithCustomerInfo(Customer customer) {
+		idTextField.setText(String.valueOf(customer.getUserId()));
+		nameTextField.setText(customer.getName());
+		surnameTextField.setText(customer.getSurname());
+		passwordField.setText(customer.getPassword());
+	}
+
 	public void close() {
 		frame.dispose();
 	}

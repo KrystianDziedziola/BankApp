@@ -39,7 +39,9 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 	public void update(Customer customer) {
 		try {
 			updateCustomer(customer);
-			updateAddress(customer);
+			if(customer.getAddress() != null) {
+				updateAddress(customer);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
