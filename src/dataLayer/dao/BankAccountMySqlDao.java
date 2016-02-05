@@ -3,6 +3,7 @@ package dataLayer.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import dataLayer.BankAccount;
 
@@ -51,6 +52,32 @@ public class BankAccountMySqlDao extends MySqlDao implements BankAccountDaoInter
 		}
 	}	
 	
+	public ArrayList<BankAccount> getAllAccounts(long userId) {
+		try {
+			ResultSet resultSet = statement.executeQuery(
+					"SELECT * FROM " + databaseName + ".bank_accounts WHERE user_id = " + userId);
+			return convertResultSetToBankAccountsList(resultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private ArrayList<BankAccount> convertResultSetToBankAccountsList(ResultSet resultSet) throws SQLException {
+		ArrayList<BankAccount> allBankAccountsList = new ArrayList<BankAccount>();
+		while(resultSet.next()) {
+			allBankAccountsList.add(getSingleBankAccountFromResultSet(resultSet));
+		}
+		return allBankAccountsList;
+	}
+
+	private BankAccount getSingleBankAccountFromResultSet(ResultSet resultSet) throws SQLException {
+		long accountNumber = resultSet.getLong("account_number");
+		long balance = resultSet.getLong("balance");
+		long owner = resultSet.getLong("user_id");
+		return new BankAccount(accountNumber, balance, owner);
+	}
+
 	private void setBankAccountInfo(BankAccount bankAccount, PreparedStatement preparedStatement) 
 			throws SQLException {
 		preparedStatement = getPreparedStatementWithSettedBankAccountInfo(bankAccount, preparedStatement);

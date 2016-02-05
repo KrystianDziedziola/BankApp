@@ -27,4 +27,30 @@ public class Converter {
 			customerInfo.get(CustomerInfoIndex.PASSWORD)
 		);
 	}
+
+	public static String[] convertCustomerAddressToStringArray(Address address) {
+		if(address != null) {
+			return new String[] {address.getCity(), address.getStreet(), address.getPostCode()};
+		} else {
+			return null;
+		}
+		
+	}
+
+	public static String[][] convertBankAccountsListToTwoDimensionalArray(
+			ArrayList<BankAccount> allBankAccounts) {
+		String[][] allBankAccountsArray = new String[allBankAccounts.size()][];
+		for(int bankAccountIndex = 0; bankAccountIndex < allBankAccounts.size(); bankAccountIndex++) {
+			allBankAccountsArray[bankAccountIndex] = convertSingleBankAccountToArray(
+					allBankAccounts.get(bankAccountIndex));
+		}
+		return allBankAccountsArray;
+	}
+
+	private static String[] convertSingleBankAccountToArray(BankAccount bankAccount) {
+		return new String[] {
+				String.valueOf(bankAccount.getAccountNumber()), 
+				String.valueOf(bankAccount.getBalance())
+		};
+	}
 }

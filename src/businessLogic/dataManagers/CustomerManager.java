@@ -3,8 +3,6 @@ package businessLogic.dataManagers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
-
 import dataLayer.Address;
 import dataLayer.Customer;
 import dataLayer.LoginInformation;

@@ -11,7 +11,9 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import businessLogic.dataManagers.BankAccountManager;
 import businessLogic.dataManagers.CustomerManager;
+import dataLayer.BankAccount;
 import dataLayer.Converter;
 import dataLayer.Customer;
 import dataLayer.LoginInformation;
@@ -19,9 +21,9 @@ import presentationLayer.ManageWindow;
 
 public class ManageWindowManager {
 
-	protected static final int YES_CANCEL_OPTION = 0;
 	private ManageWindow manageWindow = new ManageWindow();
 	private CustomerManager customerManager = new CustomerManager();
+	private BankAccountManager bankAccountManager = new BankAccountManager();
 	
 	private CustomerInformationWindowManager addCustomerInformationWindowManager = 
 		     new CustomerInformationWindowManager(customerManager);
@@ -55,6 +57,7 @@ public class ManageWindowManager {
 	private void connectToDatabase() {
 		try {
 			customerManager.connect(loginInformation);
+			bankAccountManager.connect(loginInformation);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -95,7 +98,7 @@ public class ManageWindowManager {
 			private int getAnswer() {
 				return JOptionPane.showConfirmDialog(manageWindow.getFrame(), 
 						"Are you sure that you want to delete this customer?", 
-						"Delete", YES_CANCEL_OPTION);
+						"Delete", JOptionPane.YES_NO_OPTION);
 			}
 		});
 	}
@@ -113,8 +116,10 @@ public class ManageWindowManager {
 				if(event.getValueIsAdjusting()) {
 					currentlySelectedCustomer = Converter.convertStringListToCustomerObject(
 							manageWindow.getCustomersTableSelectedRow());
+					enableChangeAndDeleteCustomerButtonAfterRowSelection();
+					showCurrentlySelectedCustomerAddressInTable();
+					showCurrentlySelectedCustomerBankAccountsInTable();
 				}
-				enableChangeAndDeleteCustomerButtonAfterRowSelection();
 			}
 
 			private void enableChangeAndDeleteCustomerButtonAfterRowSelection() {
@@ -125,6 +130,24 @@ public class ManageWindowManager {
 					manageWindow.setChangeCustomerButtonEnabled(false);
 					manageWindow.setDeleteCustomerButtonEnabler(false);
 				}
+			}
+			
+			private void showCurrentlySelectedCustomerAddressInTable() {
+				Customer customer = customerManager.findById(currentlySelectedCustomer.getUserId());
+				
+				String[] currentlySelectedCustomerAddress = Converter.convertCustomerAddressToStringArray(
+						customer.getAddress());
+				manageWindow.setAddressTableContent(currentlySelectedCustomerAddress);
+			}
+			
+			private void showCurrentlySelectedCustomerBankAccountsInTable() {
+				ArrayList<BankAccount> allBankAccounts = getCurrentCustomerBankAccountsList();
+				String[][] allBankAccountsArray = Converter.convertBankAccountsListToTwoDimensionalArray(allBankAccounts);
+				manageWindow.setBankAccountsTableContent(allBankAccountsArray);
+			}
+
+			private ArrayList<BankAccount> getCurrentCustomerBankAccountsList() {
+				return bankAccountManager.getCustomerAllBankAccounts(currentlySelectedCustomer.getUserId());
 			}
 			
 		});
@@ -158,6 +181,7 @@ public class ManageWindowManager {
 		public void windowClosing(WindowEvent windowEvent) {
 			if (isExitingConfirmedInDialog()){
 		       	customerManager.closeConnection();
+		       	bankAccountManager.closeConnection();
 		       	System.exit(0);
 		    }
 		}

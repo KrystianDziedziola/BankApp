@@ -1,5 +1,8 @@
 package businessLogic.dataManagers;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import dataLayer.BankAccount;
 import dataLayer.LoginInformation;
 import dataLayer.dao.BankAccountDaoInterface;
@@ -9,7 +12,7 @@ public class BankAccountManager {
 
 	private BankAccountDaoInterface bankAccountDao = new BankAccountMySqlDao();
 	
-	public void connect(LoginInformation loginInformation) throws Exception {
+	public void connect(LoginInformation loginInformation) throws ClassNotFoundException, SQLException {
 		bankAccountDao.connect(loginInformation);
 	}
 
@@ -46,6 +49,10 @@ public class BankAccountManager {
 	public void deposit(BankAccount bankAccount, int amount) {
 		bankAccount.deposit(amount);
 		bankAccountDao.update(bankAccount);
+	}
+	
+	public ArrayList<BankAccount> getCustomerAllBankAccounts(long userId) {
+		return bankAccountDao.getAllAccounts(userId);
 	}
 	
 	public void transferFunds(BankAccount from, BankAccount to, long amount) throws Exception {

@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import dataLayer.BankAccount;
+
 import javax.swing.event.ListSelectionListener;
 
 import java.awt.Font;
@@ -64,7 +66,7 @@ public class ManageWindow {
 	}
 	
 	public void updateCustomersTable(String[][] allCustomersInfoForTable) {
-		clearCustomersTable();
+		clearTable(customersTable);
 		addContentToCustomersTable(allCustomersInfoForTable);
 	}
 	
@@ -116,6 +118,20 @@ public class ManageWindow {
 			return false;
 		} else {
 			return true;
+		}
+	}
+	
+	public void setAddressTableContent(String[] currentlySelectedCustomerAddress) {
+		clearTable(addressesTable);
+		if(currentlySelectedCustomerAddress != null) {
+			addressesTableModel.addRow(currentlySelectedCustomerAddress);
+		}
+	}
+	
+	public void setBankAccountsTableContent(String[][] allBankAccountsArray) {
+		clearTable(bankAccountsTable);
+		for(int rowIndex = 0; rowIndex < allBankAccountsArray.length; rowIndex++) {
+			bankAccountsTableModel.addRow(allBankAccountsArray[rowIndex]);
 		}
 	}
 
@@ -254,9 +270,10 @@ public class ManageWindow {
 		frameContentPane.add(addressTableScrollPane);
 	}
 	
-	private void clearCustomersTable() {
-		for(int rowNumber = customersTableModel.getRowCount() - 1; rowNumber >= 0; rowNumber--) {
-			customersTableModel.removeRow(rowNumber);
+	private void clearTable(JTable table) {
+		DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+		for(int rowNumber = tableModel.getRowCount() - 1; rowNumber >= 0; rowNumber--) {
+			tableModel.removeRow(rowNumber);
 		}
 	}
 	

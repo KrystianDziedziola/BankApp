@@ -4,10 +4,12 @@ import java.awt.EventQueue;
 import java.sql.SQLException;
 import java.util.List;
 
+import businessLogic.dataManagers.BankAccountManager;
 import businessLogic.dataManagers.CustomerManager;
 import businessLogic.viewManagers.ConnectionWindowManager;
 import businessLogic.viewManagers.ManageWindowManager;
 import dataLayer.Address;
+import dataLayer.BankAccount;
 import dataLayer.Customer;
 import dataLayer.LoginInformation;
 
@@ -27,18 +29,17 @@ public class Starter {
 		
 		
 		/*CustomerManager customerManager = new CustomerManager();
+		BankAccountManager bankAccountManager = new BankAccountManager();
 		try {
-			customerManager.connect(new LoginInformation("user", "logitech1"));
+			bankAccountManager.connect(new LoginInformation("user", "logitech1"));
+			bankAccountManager.create(1243, 12443, 12341234L);
+			bankAccountManager.closeConnection();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		
-		List<Customer> allCustomers = customerManager.getAllCustomersList();
-		for(Customer customer:allCustomers) {
-			System.out.println(customer);
 		}*/
+		
 	}	
 	
 }
