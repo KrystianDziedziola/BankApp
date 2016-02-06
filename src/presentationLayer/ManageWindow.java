@@ -148,6 +148,10 @@ public class ManageWindow {
 	public void setDeleteAddressButtonEnabled(boolean isEnabled) {
 		deleteAddressButton.setEnabled(isEnabled);
 	}
+	
+	public void addAddAddressButtonListener(ActionListener actionListener) {
+		addAddressButton.addActionListener(actionListener);
+	}
 
 	private void initialize() {
 		initializeFrame();

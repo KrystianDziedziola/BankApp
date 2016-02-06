@@ -27,9 +27,11 @@ public class ManageWindowManager {
 	
 	private CustomerInformationWindowManager addCustomerInformationWindowManager = 
 		     new CustomerInformationWindowManager(customerManager);
-	
 	private CustomerInformationWindowManager changeCustomerInformationWindowManager = 
 		     new CustomerInformationWindowManager(customerManager, false);
+	
+	private AddressInformationWindowManager addressInformationWindowManger = 
+			new AddressInformationWindowManager();
 	
 	private LoginInformation loginInformation;
 	
@@ -65,14 +67,27 @@ public class ManageWindowManager {
 	
 	private void defineComponentsActions() {
 		defineFrameExitButtonAction();
+		defineCustomerButtonsActions();
+		defineInformationWindowButtonsActions();
+		defineCustomersTableSelectAction();
+		defineAddressTableButtonsActions();
+	}
+	
+	private void defineCustomerButtonsActions() {
 		defineAddCustomerButtonAction();
 		defineChangeCustomerButtonAction();
 		defineDeleteCustomerButtonAction();
-		defineCustomerInformationWindowAcceptButtonAction();
-		defineCustomerInformationWindowChangeButtonAction();
-		defineCustomersTableSelectAction();
 	}
 	
+	private void defineInformationWindowButtonsActions() {
+		defineCustomerInformationWindowAcceptButtonAction();
+		defineCustomerInformationWindowChangeButtonAction();
+	}
+	
+	private void defineAddressTableButtonsActions() {
+		defineAddressAddButtonAction();
+	}
+
 	private void defineFrameExitButtonAction() {
 		manageWindow.addWindowListenerToFrame(new ExitWindowListener());
 	}
@@ -233,6 +248,16 @@ public class ManageWindowManager {
 			return bankAccountManager.getCustomerAllBankAccounts(currentlySelectedCustomer.getUserId());
 		}
 			
+	}
+	
+	private void defineAddressAddButtonAction() {
+		manageWindow.addAddAddressButtonListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				addressInformationWindowManger.show();
+			}
+			
+		});
 	}
 	
 }
