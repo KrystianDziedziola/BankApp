@@ -37,17 +37,9 @@ public class ManageWindowManager {
 	
 	public ManageWindowManager(LoginInformation loginInformation) {
 		this.loginInformation = loginInformation;
-		
 		connectToDatabase();
 		fillCustomersTable();
-		
-		defineFrameExitButtonAction();
-		defineAddCustomerButtonAction();
-		defineChangeCustomerButtonAction();
-		defineDeleteCustomerButtonAction();
-		defineCustomerInformationWindowAcceptButtonAction();
-		defineCustomerInformationWindowChangeButtonAction();
-		defineCustomersTableSelectAction();
+		defineComponentsActions();
 	}
 	
 	public void show() {
@@ -65,92 +57,46 @@ public class ManageWindowManager {
 		}
 	}
 	
-	private void defineFrameExitButtonAction() {
-		manageWindow.addWindowListenerToFrame(new ExitWindowListener());
-	}
-	
-	private void defineAddCustomerButtonAction() {
-		manageWindow.addAddCustomerButtonListener(new AddCustomerButtonActionListener());
-	}
-	
-	private void defineChangeCustomerButtonAction() {
-		manageWindow.addChangeCustomerButtonListener(new ChangeCustomerButtonActionListener());
-	}
-	
-	private void defineDeleteCustomerButtonAction() {
-		manageWindow.addDeleteCustomerButtonListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(isDeletingAccepted()) {
-					customerManager.deleteCustomerById(currentlySelectedCustomer.getUserId());
-					fillCustomersTable();
-				}
-			}
-
-			private boolean isDeletingAccepted() {
-				final int YES_BUTTON_ID = 0;
-				if(getAnswer() == YES_BUTTON_ID) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-
-			private int getAnswer() {
-				return JOptionPane.showConfirmDialog(manageWindow.getFrame(), 
-						"Are you sure that you want to delete this customer?", 
-						"Delete", JOptionPane.YES_NO_OPTION);
-			}
-		});
-	}
-	
 	private void fillCustomersTable() {
 		String[][] allCustomersInfoForTable = Converter.convertCustomersListToTwoDimensionalStringArray(
 												customerManager.getAllCustomersList());
 		manageWindow.updateCustomersTable(allCustomersInfoForTable);
 	}
 	
-	private void defineCustomersTableSelectAction() {
-		manageWindow.addCustomersTableSelectionListener(new ListSelectionListener() {
-
-			public void valueChanged(ListSelectionEvent event) {
-				if(event.getValueIsAdjusting()) {
-					currentlySelectedCustomer = Converter.convertStringListToCustomerObject(
-							manageWindow.getCustomersTableSelectedRow());
-					enableChangeAndDeleteCustomerButtonAfterRowSelection();
-					showCurrentlySelectedCustomerAddressInTable();
-					showCurrentlySelectedCustomerBankAccountsInTable();
-				}
-			}
-
-			private void enableChangeAndDeleteCustomerButtonAfterRowSelection() {
-				if(manageWindow.isAnyRowInCustomersTableSelected()) {
-					manageWindow.setChangeCustomerButtonEnabled(true);
-					manageWindow.setDeleteCustomerButtonEnabler(true);
-				} else {
-					manageWindow.setChangeCustomerButtonEnabled(false);
-					manageWindow.setDeleteCustomerButtonEnabler(false);
-				}
-			}
+	private void defineComponentsActions() {
+		defineFrameExitButtonAction();
+		defineAddCustomerButtonAction();
+		defineChangeCustomerButtonAction();
+		defineDeleteCustomerButtonAction();
+		defineCustomerInformationWindowAcceptButtonAction();
+		defineCustomerInformationWindowChangeButtonAction();
+		defineCustomersTableSelectAction();
+	}
+	
+	private void defineFrameExitButtonAction() {
+		manageWindow.addWindowListenerToFrame(new ExitWindowListener());
+	}
+	
+	private void defineAddCustomerButtonAction() {
+		manageWindow.addAddCustomerButtonListener(new ActionListener() {
 			
-			private void showCurrentlySelectedCustomerAddressInTable() {
-				Customer customer = customerManager.findById(currentlySelectedCustomer.getUserId());
-				
-				String[] currentlySelectedCustomerAddress = Converter.convertCustomerAddressToStringArray(
-						customer.getAddress());
-				manageWindow.setAddressTableContent(currentlySelectedCustomerAddress);
-			}
-			
-			private void showCurrentlySelectedCustomerBankAccountsInTable() {
-				ArrayList<BankAccount> allBankAccounts = getCurrentCustomerBankAccountsList();
-				String[][] allBankAccountsArray = Converter.convertBankAccountsListToTwoDimensionalArray(allBankAccounts);
-				manageWindow.setBankAccountsTableContent(allBankAccountsArray);
-			}
-
-			private ArrayList<BankAccount> getCurrentCustomerBankAccountsList() {
-				return bankAccountManager.getCustomerAllBankAccounts(currentlySelectedCustomer.getUserId());
+			public void actionPerformed(ActionEvent e) {
+				addCustomerInformationWindowManager.show();
 			}
 			
 		});
+	}
+	
+	private void defineChangeCustomerButtonAction() {
+		manageWindow.addChangeCustomerButtonListener(new ChangeCustomerButtonListener());
+	}
+	
+	private void defineDeleteCustomerButtonAction() {
+		manageWindow.addDeleteCustomerButtonListener(new DeleteCustomerButtonListener());
+	}
+	
+	private void defineCustomersTableSelectAction() {
+		manageWindow.addCustomersTableSelectionListener(new CustomerSelectedListener());
 	}
 	
 	private void defineCustomerInformationWindowAcceptButtonAction() {
@@ -196,15 +142,7 @@ public class ManageWindowManager {
 		}
 	}
 	
-	private class AddCustomerButtonActionListener implements ActionListener {
-
-		public void actionPerformed(ActionEvent e) {
-			addCustomerInformationWindowManager.show();
-		}
-		
-	}
-	
-	private class ChangeCustomerButtonActionListener implements ActionListener {
+	private class ChangeCustomerButtonListener implements ActionListener {
 		
 		public void actionPerformed(ActionEvent e) {
 			ArrayList<String> selectedCustomerInfo = manageWindow.getCustomersTableSelectedRow();
@@ -213,6 +151,88 @@ public class ManageWindowManager {
 			changeCustomerInformationWindowManager.show(selectedCustomer);
 		}
 
+	}
+	
+	private class DeleteCustomerButtonListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent e) {
+			if(isDeletingAccepted()) {
+				customerManager.deleteCustomerById(currentlySelectedCustomer.getUserId());
+				fillCustomersTable();
+			}
+		}
+
+		private boolean isDeletingAccepted() {
+			final int YES_BUTTON_ID = 0;
+			if(getAnswer() == YES_BUTTON_ID) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		private int getAnswer() {
+			return JOptionPane.showConfirmDialog(manageWindow.getFrame(), 
+					"Are you sure that you want to delete this customer?", 
+					"Delete", JOptionPane.YES_NO_OPTION);
+		}
+		
+	}
+	
+	private class CustomerSelectedListener implements ListSelectionListener {
+
+		public void valueChanged(ListSelectionEvent event) {
+			if(event.getValueIsAdjusting()) {
+				currentlySelectedCustomer = Converter.convertStringListToCustomerObject(
+						manageWindow.getCustomersTableSelectedRow());
+					
+				showCurrentlySelectedCustomerAddressInTable();
+				showCurrentlySelectedCustomerBankAccountsInTable();
+				enableChangeAndDeleteCustomerButtonAfterRowSelection();
+				enableAppropriateAddressButtons();
+			}
+		}
+
+		private void enableChangeAndDeleteCustomerButtonAfterRowSelection() {
+			if(manageWindow.isAnyRowInCustomersTableSelected()) {
+				manageWindow.setChangeCustomerButtonEnabled(true);
+				manageWindow.setDeleteCustomerButtonEnabler(true);
+			} else {
+				manageWindow.setChangeCustomerButtonEnabled(false);
+				manageWindow.setDeleteCustomerButtonEnabler(false);
+			}
+		}
+			
+		private void enableAppropriateAddressButtons() {
+			if(manageWindow.isAddressTableEmpty()) {
+				manageWindow.setAddAddressButtonEnabled(true);
+				manageWindow.setChangeAddressButtonEnabled(false);
+				manageWindow.setDeleteAddressButtonEnabled(false);
+			} else {
+				manageWindow.setAddAddressButtonEnabled(false);
+				manageWindow.setChangeAddressButtonEnabled(true);
+				manageWindow.setDeleteAddressButtonEnabled(true);
+			}
+		}
+			
+		private void showCurrentlySelectedCustomerAddressInTable() {
+			Customer customer = customerManager.findById(currentlySelectedCustomer.getUserId());
+			
+			String[] currentlySelectedCustomerAddress = Converter.convertCustomerAddressToStringArray(
+					customer.getAddress());
+			manageWindow.setAddressTableContent(currentlySelectedCustomerAddress);
+		}
+			
+		private void showCurrentlySelectedCustomerBankAccountsInTable() {
+			ArrayList<BankAccount> allBankAccounts = getCurrentCustomerBankAccountsList();
+			String[][] allBankAccountsArray = Converter.convertBankAccountsListToTwoDimensionalArray(allBankAccounts);
+			manageWindow.setBankAccountsTableContent(allBankAccountsArray);
+		}
+
+		private ArrayList<BankAccount> getCurrentCustomerBankAccountsList() {
+			return bankAccountManager.getCustomerAllBankAccounts(currentlySelectedCustomer.getUserId());
+		}
+			
 	}
 	
 }
