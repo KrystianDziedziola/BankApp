@@ -77,6 +77,16 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 			"INSERT INTO "+ databaseName + ".customers VALUES (?, ?, ?, ?)");
 		setCustomerInfo(preparedStatement, customer);		
 	}
+	
+	public void deleteAddress(long customerId) {
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(
+					"DELETE FROM " + databaseName + ".addresses WHERE user_id = " + customerId);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void setCustomerInfo(PreparedStatement preparedStatement, Customer customer) throws SQLException {
 		preparedStatement = getPreparedStatementWithSettedCustomerInfo(customer, preparedStatement);

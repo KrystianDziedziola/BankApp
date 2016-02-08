@@ -152,6 +152,15 @@ public class ManageWindow {
 	public void addAddAddressButtonListener(ActionListener actionListener) {
 		addAddressButton.addActionListener(actionListener);
 	}
+	
+	public void addDeleteButtonListener(ActionListener actionListener) {
+		deleteAddressButton.addActionListener(actionListener);
+		
+	}
+	
+	public void clearAddressTable() {
+		clearTable(addressesTable);
+	}
 
 	private void initialize() {
 		initializeFrame();

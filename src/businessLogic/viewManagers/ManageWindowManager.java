@@ -89,6 +89,40 @@ public class ManageWindowManager {
 	
 	private void defineAddressTableButtonsActions() {
 		defineAddressAddButtonAction();
+		defineAddressDeleteButtonAction();
+	}
+	
+	private void defineAddressAddButtonAction() {
+		manageWindow.addAddAddressButtonListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				addressInformationWindowManager.show();
+			}
+			
+		});
+	}
+
+	private void defineAddressDeleteButtonAction() {
+		manageWindow.addDeleteButtonListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				if(getAnswer() == JOptionPane.YES_OPTION) {
+					delete();
+				}
+			}
+			
+			private void delete() {
+				customerManager.deleteAddress(currentlySelectedCustomer.getUserId());
+				manageWindow.clearAddressTable();
+				enableOnlyAddAddressButton();
+			}
+
+			private int getAnswer() {
+				return JOptionPane.showConfirmDialog(manageWindow.getFrame(), 
+						"Are you sure that you want to delete this address?", 
+						"Delete", JOptionPane.YES_NO_OPTION);
+			}
+		});
 	}
 
 	private void defineFrameExitButtonAction() {
@@ -158,7 +192,6 @@ public class ManageWindowManager {
 			}
 			
 			private void updateTables() {
-				fillCustomersTable();
 				fillAddressTable(address);
 			}
 			
@@ -216,12 +249,7 @@ public class ManageWindowManager {
 		}
 
 		private boolean isDeletingAccepted() {
-			final int YES_BUTTON_ID = 0;
-			if(getAnswer() == YES_BUTTON_ID) {
-				return true;
-			} else {
-				return false;
-			}
+			return getAnswer() == JOptionPane.YES_OPTION ? true : false;
 		}
 
 		private int getAnswer() {
@@ -296,14 +324,4 @@ public class ManageWindowManager {
 		manageWindow.setDeleteAddressButtonEnabled(true);
 	}
 
-	private void defineAddressAddButtonAction() {
-		manageWindow.addAddAddressButtonListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent arg0) {
-				addressInformationWindowManager.show();
-			}
-			
-		});
-	}
-	
 }

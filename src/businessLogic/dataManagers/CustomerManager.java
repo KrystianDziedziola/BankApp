@@ -57,6 +57,10 @@ public class CustomerManager {
 	public void closeConnection() {
 		customerDao.closeConnection();
 	}
+	
+	public void deleteAddress(long customerId) {
+		customerDao.deleteAddress(customerId);
+	}
 
 }
 	

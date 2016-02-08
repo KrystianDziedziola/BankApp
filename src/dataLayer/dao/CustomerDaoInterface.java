@@ -18,5 +18,6 @@ public interface CustomerDaoInterface {
 	public ArrayList<Customer> getAllCustomersList();
 	public void closeConnection();
 	public void addAddress(Address address, long customerId);
+	public void deleteAddress(long customerId);
 	
 }
