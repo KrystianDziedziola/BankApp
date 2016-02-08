@@ -13,6 +13,7 @@ import javax.swing.event.ListSelectionListener;
 
 import businessLogic.dataManagers.BankAccountManager;
 import businessLogic.dataManagers.CustomerManager;
+import dataLayer.Address;
 import dataLayer.BankAccount;
 import dataLayer.Converter;
 import dataLayer.Customer;
@@ -30,7 +31,7 @@ public class ManageWindowManager {
 	private CustomerInformationWindowManager changeCustomerInformationWindowManager = 
 		     new CustomerInformationWindowManager(customerManager, false);
 	
-	private AddressInformationWindowManager addressInformationWindowManger = 
+	private AddressInformationWindowManager addressInformationWindowManager = 
 			new AddressInformationWindowManager();
 	
 	private LoginInformation loginInformation;
@@ -68,9 +69,10 @@ public class ManageWindowManager {
 	private void defineComponentsActions() {
 		defineFrameExitButtonAction();
 		defineCustomerButtonsActions();
-		defineInformationWindowButtonsActions();
 		defineCustomersTableSelectAction();
 		defineAddressTableButtonsActions();
+		defineCustomerInformationWindowButtonsActions();
+		defineAddressInformationWindowAcceptButtonAction();
 	}
 	
 	private void defineCustomerButtonsActions() {
@@ -79,10 +81,11 @@ public class ManageWindowManager {
 		defineDeleteCustomerButtonAction();
 	}
 	
-	private void defineInformationWindowButtonsActions() {
+	private void defineCustomerInformationWindowButtonsActions() {
 		defineCustomerInformationWindowAcceptButtonAction();
 		defineCustomerInformationWindowChangeButtonAction();
 	}
+	
 	
 	private void defineAddressTableButtonsActions() {
 		defineAddressAddButtonAction();
@@ -136,6 +139,42 @@ public class ManageWindowManager {
 		});
 	}
 	
+	private void defineAddressInformationWindowAcceptButtonAction() {
+		addressInformationWindowManager.addAcceptAddressButtonActionListener(new ActionListener() {
+
+			private Address address;
+			
+			public void actionPerformed(ActionEvent e) {
+				addAddress();
+				updateTables();
+				enableOnlyChangeAndDeleteButtons();
+				closeAndClearWindow();
+			}
+
+			private void addAddress() {
+				address = addressInformationWindowManager.getAddress();
+				long customerId = currentlySelectedCustomer.getUserId();
+				customerManager.addAddress(address, customerId);
+			}
+			
+			private void updateTables() {
+				fillCustomersTable();
+				fillAddressTable(address);
+			}
+			
+			private void closeAndClearWindow() {
+				addressInformationWindowManager.clear();
+				addressInformationWindowManager.close();
+			}
+
+		});
+	}
+	
+	private void fillAddressTable(Address address) {
+		String[] addressInformation = Converter.convertCustomerAddressToStringArray(address);
+		manageWindow.setAddressTableContent(addressInformation);
+	}
+	
 	private class ExitWindowListener extends WindowAdapter {
 		
 		@Override
@@ -162,7 +201,6 @@ public class ManageWindowManager {
 		public void actionPerformed(ActionEvent e) {
 			ArrayList<String> selectedCustomerInfo = manageWindow.getCustomersTableSelectedRow();
 			Customer selectedCustomer = Converter.convertStringListToCustomerObject(selectedCustomerInfo);
-			
 			changeCustomerInformationWindowManager.show(selectedCustomer);
 		}
 
@@ -218,18 +256,6 @@ public class ManageWindowManager {
 			}
 		}
 			
-		private void enableAppropriateAddressButtons() {
-			if(manageWindow.isAddressTableEmpty()) {
-				manageWindow.setAddAddressButtonEnabled(true);
-				manageWindow.setChangeAddressButtonEnabled(false);
-				manageWindow.setDeleteAddressButtonEnabled(false);
-			} else {
-				manageWindow.setAddAddressButtonEnabled(false);
-				manageWindow.setChangeAddressButtonEnabled(true);
-				manageWindow.setDeleteAddressButtonEnabled(true);
-			}
-		}
-			
 		private void showCurrentlySelectedCustomerAddressInTable() {
 			Customer customer = customerManager.findById(currentlySelectedCustomer.getUserId());
 			
@@ -250,11 +276,31 @@ public class ManageWindowManager {
 			
 	}
 	
+	private void enableAppropriateAddressButtons() {
+		if(manageWindow.isAddressTableEmpty()) {
+			enableOnlyAddAddressButton();
+		} else {
+			enableOnlyChangeAndDeleteButtons();
+		}
+	}
+	
+	private void enableOnlyAddAddressButton() {
+		manageWindow.setAddAddressButtonEnabled(true);
+		manageWindow.setChangeAddressButtonEnabled(false);
+		manageWindow.setDeleteAddressButtonEnabled(false);
+	}
+	
+	private void enableOnlyChangeAndDeleteButtons() {
+		manageWindow.setAddAddressButtonEnabled(false);
+		manageWindow.setChangeAddressButtonEnabled(true);
+		manageWindow.setDeleteAddressButtonEnabled(true);
+	}
+
 	private void defineAddressAddButtonAction() {
 		manageWindow.addAddAddressButtonListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				addressInformationWindowManger.show();
+				addressInformationWindowManager.show();
 			}
 			
 		});

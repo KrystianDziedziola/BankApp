@@ -50,6 +50,10 @@ public class CustomerManager {
 		return customerDao.getAllCustomersList();
 	}	
 	
+	public void addAddress(Address address, long customerId) {
+		customerDao.addAddress(address, customerId);
+	}
+	
 	public void closeConnection() {
 		customerDao.closeConnection();
 	}

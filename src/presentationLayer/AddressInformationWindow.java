@@ -8,6 +8,8 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+
 import javax.swing.SwingConstants;
 
 public class AddressInformationWindow {
@@ -35,6 +37,34 @@ public class AddressInformationWindow {
 
 	public void show() {
 		frame.setVisible(true);
+	}
+	
+	public void addCancelButtonActionListener(ActionListener actionListener) {
+		cancelButton.addActionListener(actionListener);
+	}
+	
+	public JFrame getFrame() {
+		return frame;
+	}
+	
+	public void addAcceptButtonActionListener(ActionListener actionListener) {
+		acceptButton.addActionListener(actionListener);
+	}
+	
+	public String getStreet() {
+		return streetTextField.getText();
+	}
+
+	public String getCity() {
+		return cityTextField.getText();
+	}
+
+	public String getPostcode() {
+		return postcodeTextField.getText();
+	}
+
+	public void close() {
+		frame.dispose();
 	}
 	
 	private void initialize() {
@@ -111,4 +141,11 @@ public class AddressInformationWindow {
 		acceptButton.setBounds(25, 115, 90, 23);
 		cancelButton.setBounds(125, 115, 90, 23);
 	}
+
+	public void clear() {
+		streetTextField.setText(null);
+		cityTextField.setText(null);
+		postcodeTextField.setText(null);
+	}
+
 }

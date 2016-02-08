@@ -3,6 +3,7 @@ package dataLayer.dao;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import dataLayer.Address;
 import dataLayer.Customer;
 import dataLayer.LoginInformation;
 
@@ -16,5 +17,6 @@ public interface CustomerDaoInterface {
 	public Customer getCurrentInformation(Customer customer);
 	public ArrayList<Customer> getAllCustomersList();
 	public void closeConnection();
+	public void addAddress(Address address, long customerId);
 	
 }
