@@ -2,6 +2,7 @@ package starter;
 
 import java.awt.EventQueue;
 
+import businessLogic.viewManagers.ConnectionWindowManager;
 import businessLogic.viewManagers.ManageWindowManager;
 import dataLayer.LoginInformation;
 

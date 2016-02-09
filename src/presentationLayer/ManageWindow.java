@@ -56,7 +56,11 @@ public class ManageWindow {
 	private final int TABLE_TITLE_FONT_SIZE = 14;
 	
 	public ManageWindow() {
-		initialize();
+		initializeFrame();
+		initializeLabels();
+		initializeButtons();
+		initializeTables();
+		addComponentsToFrame();
 	}
 	
 	public void show() {
@@ -134,7 +138,11 @@ public class ManageWindow {
 	}
 	
 	public boolean isAddressTableEmpty() {
-		return addressesTableModel.getRowCount() > 0 ? false : true;
+		return isTableEmpty(addressesTableModel);
+	}
+	
+	public boolean isBankAccountsTableEmpty() {
+		return isTableEmpty(bankAccountsTableModel);
 	}
 	
 	public void setAddAddressButtonEnabled(boolean isEnabled) {
@@ -159,19 +167,29 @@ public class ManageWindow {
 	
 	public void addDeleteAddressButtonListener(ActionListener actionListener) {
 		deleteAddressButton.addActionListener(actionListener);
-		
 	}
 	
 	public void clearAddressTable() {
 		clearTable(addressesTable);
 	}
+	
+	public void setAddBankAccountButtonEnabled(boolean isEnabled) {
+		addBankAccountButton.setEnabled(isEnabled);
+	}
 
-	private void initialize() {
-		initializeFrame();
-		initializeLabels();
-		initializeButtons();
-		initializeTables();
-		addComponentsToFrame();
+	public void setChangeBankAccountButtonEnabled(boolean isEnabled) {
+		changeBankAccountButton.setEnabled(isEnabled);
+	}
+
+	public void setDeleteBankAccountButtonEnabled(boolean isEnabled) {
+		deleteBankAccountButton.setEnabled(isEnabled);
+	}
+	
+	public void disableAllBankAccountButtons() {
+		addBankAccountButton.setEnabled(false);
+		changeBankAccountButton.setEnabled(false);
+		deleteBankAccountButton.setEnabled(false);
+		
 	}
 	
 	private void initializeFrame() {
@@ -244,7 +262,7 @@ public class ManageWindow {
 		String[] bankAccountsTableColumnNames = {"ACCOUNT NUMBER", "BALANCE"};
 		bankAccountsTableModel = getInitializedTableModel(bankAccountsTableColumnNames);
 		bankAccountsTable = new JTable(bankAccountsTableModel);
-		bankAccountsTable.setEnabled(false);
+		//bankAccountsTable.setEnabled(false);
 		bankAccountsTableScrollPane = new JScrollPane();
 		initializeScrollPane(bankAccountsTableScrollPane, bankAccountsTable);
 		disableBankAccountsTableButtons();
@@ -282,6 +300,10 @@ public class ManageWindow {
 		addAddressButton.setEnabled(false);
 		changeAddressButton.setEnabled(false);
 		deleteAddressButton.setEnabled(false);
+	}
+	
+	private boolean isTableEmpty(DefaultTableModel model) {
+		return model.getRowCount() > 0 ? false : true;
 	}
 	
 	private void addComponentsToFrame() {

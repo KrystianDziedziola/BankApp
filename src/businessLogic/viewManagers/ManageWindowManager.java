@@ -198,7 +198,7 @@ public class ManageWindowManager {
 			public void actionPerformed(ActionEvent e) {
 				addAddress();
 				updateTables();
-				enableOnlyChangeAndDeleteButtons();
+				enableOnlyChangeAndDeleteAddressButtons();
 				closeAndClearWindow();
 			}
 
@@ -323,6 +323,7 @@ public class ManageWindowManager {
 				showCurrentlySelectedCustomerBankAccountsInTable();
 				enableChangeAndDeleteCustomerButtonAfterRowSelection();
 				enableAppropriateAddressButtons();
+				enableAppropriateBankAccountsButtons();
 			}
 		}
 		
@@ -365,8 +366,23 @@ public class ManageWindowManager {
 		if(manageWindow.isAddressTableEmpty()) {
 			enableOnlyAddAddressButton();
 		} else {
-			enableOnlyChangeAndDeleteButtons();
+			enableOnlyChangeAndDeleteAddressButtons();
 		}
+	}
+	
+	private void enableAppropriateBankAccountsButtons() {
+		if(manageWindow.isBankAccountsTableEmpty()) {
+			enableOnlyAddBankAccountButton();
+		} else {
+			manageWindow.disableAllBankAccountButtons();
+		}
+	}
+	
+	private void enableOnlyAddBankAccountButton() {
+		manageWindow.setAddBankAccountButtonEnabled(true);
+		manageWindow.setChangeBankAccountButtonEnabled(false);
+		manageWindow.setDeleteBankAccountButtonEnabled(false);
+		
 	}
 	
 	private void enableOnlyAddAddressButton() {
@@ -375,7 +391,7 @@ public class ManageWindowManager {
 		manageWindow.setDeleteAddressButtonEnabled(false);
 	}
 	
-	private void enableOnlyChangeAndDeleteButtons() {
+	private void enableOnlyChangeAndDeleteAddressButtons() {
 		manageWindow.setAddAddressButtonEnabled(false);
 		manageWindow.setChangeAddressButtonEnabled(true);
 		manageWindow.setDeleteAddressButtonEnabled(true);
