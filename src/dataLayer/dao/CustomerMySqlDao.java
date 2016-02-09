@@ -48,6 +48,19 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 			e.printStackTrace();
 		}
 	}
+	
+	public void updateAddress(Address address, long customerId) {
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = connection.prepareStatement(
+					"UPDATE " + databaseName + ".addresses SET " + 
+					"street = ?, city = ?, postcode = ?, user_id = ? WHERE user_id = " + customerId);
+			setAddressInfo(address, preparedStatement, customerId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 	public Customer getCurrentInformation(Customer customer) {
 		return find(customer.getUserId());
@@ -124,7 +137,7 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 		int columnNumber = 1;
 		preparedStatement.setString(columnNumber++, address.getStreet());
 		preparedStatement.setString(columnNumber++, address.getCity());
-		preparedStatement.setString(columnNumber++, address.getPostCode());
+		preparedStatement.setString(columnNumber++, address.getPostcode());
 		preparedStatement.setLong(columnNumber++, customerId);
 		return preparedStatement;
 	}
@@ -186,13 +199,6 @@ public class CustomerMySqlDao extends MySqlDao implements CustomerDaoInterface {
 				"UPDATE " + databaseName + ".customers SET " + 
 				"user_id = ?, name = ?, surname = ?, password = ? WHERE USER_ID = " + customer.getUserId());
 		setCustomerInfo(preparedStatement, customer);
-	}
-	
-	private void updateAddress(Address address, long customerId) throws SQLException {
-		PreparedStatement preparedStatement = connection.prepareStatement(
-				"UPDATE " + databaseName + ".addresses SET " + 
-				"street = ?, city = ?, postcode = ?, user_id = ? WHERE user_id = " + customerId);
-		setAddressInfo(address, preparedStatement, customerId);
 	}
 
 }

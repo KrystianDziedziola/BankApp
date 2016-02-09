@@ -28,7 +28,7 @@ public class Address {
 		this.city = city;
 	}
 
-	public String getPostCode() {
+	public String getPostcode() {
 		return postCode;
 	}
 

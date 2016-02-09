@@ -18,6 +18,10 @@ public class AddressInformationWindowManager {
 		addressInformationWindow.show();
 	}
 	
+	public void show(Address address) {
+		addressInformationWindow.show(address);
+	}
+	
 	public void close() {
 		addressInformationWindow.close();
 	}

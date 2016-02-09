@@ -153,7 +153,11 @@ public class ManageWindow {
 		addAddressButton.addActionListener(actionListener);
 	}
 	
-	public void addDeleteButtonListener(ActionListener actionListener) {
+	public void addChangeAddressButtonListener(ActionListener actionListener) {
+		changeAddressButton.addActionListener(actionListener);
+	}
+	
+	public void addDeleteAddressButtonListener(ActionListener actionListener) {
 		deleteAddressButton.addActionListener(actionListener);
 		
 	}

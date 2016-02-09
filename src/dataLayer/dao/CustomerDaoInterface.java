@@ -19,5 +19,5 @@ public interface CustomerDaoInterface {
 	public void closeConnection();
 	public void addAddress(Address address, long customerId);
 	public void deleteAddress(long customerId);
-	
+	public void updateAddress(Address address, long customerId);
 }

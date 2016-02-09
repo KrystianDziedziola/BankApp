@@ -61,6 +61,10 @@ public class CustomerManager {
 	public void deleteAddress(long customerId) {
 		customerDao.deleteAddress(customerId);
 	}
+	
+	public void updateAddress(Address address, long userId) {
+		customerDao.updateAddress(address, userId);
+	}
 
 }
 	

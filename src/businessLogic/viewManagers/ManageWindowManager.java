@@ -292,6 +292,11 @@ public class ManageWindowManager {
 			if(isDeletingAccepted()) {
 				customerManager.deleteCustomerById(currentlySelectedCustomer.getUserId());
 				fillCustomersTable();
+				if(!manageWindow.isAddressTableEmpty()) {
+					enableOnlyAddAddressButton();
+					manageWindow.clearAddressTable();
+				}
+				
 			}
 		}
 

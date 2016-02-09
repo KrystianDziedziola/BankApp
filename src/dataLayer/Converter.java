@@ -30,7 +30,7 @@ public class Converter {
 
 	public static String[] convertCustomerAddressToStringArray(Address address) {
 		if(address != null) {
-			return new String[] {address.getCity(), address.getStreet(), address.getPostCode()};
+			return new String[] {address.getStreet(), address.getCity(), address.getPostcode()};
 		} else {
 			return null;
 		}

@@ -1,16 +1,8 @@
 package starter;
 
 import java.awt.EventQueue;
-import java.sql.SQLException;
-import java.util.List;
 
-import businessLogic.dataManagers.BankAccountManager;
-import businessLogic.dataManagers.CustomerManager;
-import businessLogic.viewManagers.ConnectionWindowManager;
 import businessLogic.viewManagers.ManageWindowManager;
-import dataLayer.Address;
-import dataLayer.BankAccount;
-import dataLayer.Customer;
 import dataLayer.LoginInformation;
 
 public class Starter {

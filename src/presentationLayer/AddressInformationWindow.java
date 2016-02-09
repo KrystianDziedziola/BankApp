@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.SwingConstants;
 
+import dataLayer.Address;
+
 public class AddressInformationWindow {
 
 	private JFrame frame;
@@ -37,6 +39,13 @@ public class AddressInformationWindow {
 
 	public void show() {
 		frame.setVisible(true);
+	}
+	
+	public void show(Address address) {
+		streetTextField.setText(address.getStreet());
+		cityTextField.setText(address.getCity());
+		postcodeTextField.setText(address.getPostcode());
+		show();
 	}
 	
 	public void addCancelButtonActionListener(ActionListener actionListener) {
