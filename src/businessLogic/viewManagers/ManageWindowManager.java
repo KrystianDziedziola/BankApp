@@ -31,7 +31,9 @@ public class ManageWindowManager {
 	private CustomerInformationWindowManager changeCustomerInformationWindowManager = 
 		     new CustomerInformationWindowManager(customerManager, false);
 	
-	private AddressInformationWindowManager addressInformationWindowManager = 
+	private AddressInformationWindowManager addAddressInformationWindowManager = 
+			new AddressInformationWindowManager();
+	private AddressInformationWindowManager changeAddressInformationWindowManager = 
 			new AddressInformationWindowManager();
 	
 	private LoginInformation loginInformation;
@@ -72,7 +74,7 @@ public class ManageWindowManager {
 		defineCustomersTableSelectAction();
 		defineAddressTableButtonsActions();
 		defineCustomerInformationWindowButtonsActions();
-		defineAddressInformationWindowAcceptButtonAction();
+		defineAddressInformationWindowButtonsActions();
 	}
 	
 	private void defineCustomerButtonsActions() {
@@ -86,9 +88,14 @@ public class ManageWindowManager {
 		defineCustomerInformationWindowChangeButtonAction();
 	}
 	
-	
+	private void defineAddressInformationWindowButtonsActions() {
+		defineAddAddressInformationWindowAcceptButtonAction();
+		defineChangeAddressInformationWindowAcceptButtonAction();
+	}
+
 	private void defineAddressTableButtonsActions() {
 		defineAddressAddButtonAction();
+		definceAddressChangeButtonAction();
 		defineAddressDeleteButtonAction();
 	}
 	
@@ -96,14 +103,24 @@ public class ManageWindowManager {
 		manageWindow.addAddAddressButtonListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				addressInformationWindowManager.show();
+				addAddressInformationWindowManager.show();
+			}
+			
+		});
+	}
+	
+	private void definceAddressChangeButtonAction() {
+		manageWindow.addChangeAddressButtonListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				changeAddressInformationWindowManager.show(currentlySelectedCustomer.getAddress());
 			}
 			
 		});
 	}
 
 	private void defineAddressDeleteButtonAction() {
-		manageWindow.addDeleteButtonListener(new ActionListener() {
+		manageWindow.addDeleteAddressButtonListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 				if(getAnswer() == JOptionPane.YES_OPTION) {
@@ -173,8 +190,8 @@ public class ManageWindowManager {
 		});
 	}
 	
-	private void defineAddressInformationWindowAcceptButtonAction() {
-		addressInformationWindowManager.addAcceptAddressButtonActionListener(new ActionListener() {
+	private void defineAddAddressInformationWindowAcceptButtonAction() {
+		addAddressInformationWindowManager.addAcceptAddressButtonActionListener(new ActionListener() {
 
 			private Address address;
 			
@@ -186,7 +203,7 @@ public class ManageWindowManager {
 			}
 
 			private void addAddress() {
-				address = addressInformationWindowManager.getAddress();
+				address = addAddressInformationWindowManager.getAddress();
 				long customerId = currentlySelectedCustomer.getUserId();
 				customerManager.addAddress(address, customerId);
 			}
@@ -196,10 +213,40 @@ public class ManageWindowManager {
 			}
 			
 			private void closeAndClearWindow() {
-				addressInformationWindowManager.clear();
-				addressInformationWindowManager.close();
+				addAddressInformationWindowManager.clear();
+				addAddressInformationWindowManager.close();
 			}
 
+		});
+	}
+	
+	private void defineChangeAddressInformationWindowAcceptButtonAction() {
+		changeAddressInformationWindowManager.addAcceptAddressButtonActionListener(new ActionListener() {
+
+			Address address;
+			
+			public void actionPerformed(ActionEvent e) {
+				updateAddress();
+				clearAndCloseWindow();
+				updateTable();
+			}
+
+			private void updateAddress() {
+				address = changeAddressInformationWindowManager.getAddress();
+				customerManager.updateAddress(address, currentlySelectedCustomer.getUserId());
+				currentlySelectedCustomer.setAddress(address);
+			}
+			
+			private void clearAndCloseWindow() {
+				changeAddressInformationWindowManager.clear();
+				changeAddressInformationWindowManager.close();
+			}
+			
+			private void updateTable() {
+				manageWindow.setAddressTableContent(Converter.convertCustomerAddressToStringArray(address));
+				
+			}
+			
 		});
 	}
 	
@@ -266,14 +313,33 @@ public class ManageWindowManager {
 			if(event.getValueIsAdjusting()) {
 				currentlySelectedCustomer = Converter.convertStringListToCustomerObject(
 						manageWindow.getCustomersTableSelectedRow());
-					
+				addAddressToCurrentlySelectedCustomer();	
 				showCurrentlySelectedCustomerAddressInTable();
 				showCurrentlySelectedCustomerBankAccountsInTable();
 				enableChangeAndDeleteCustomerButtonAfterRowSelection();
 				enableAppropriateAddressButtons();
 			}
 		}
+		
+		private void addAddressToCurrentlySelectedCustomer() {
+			Customer customer = customerManager.findById(currentlySelectedCustomer.getUserId());
+			currentlySelectedCustomer.setAddress(customer.getAddress());
+		}
 
+		private void showCurrentlySelectedCustomerAddressInTable() {
+			
+			
+			String[] currentlySelectedCustomerAddress = Converter.convertCustomerAddressToStringArray(
+					currentlySelectedCustomer.getAddress());
+			manageWindow.setAddressTableContent(currentlySelectedCustomerAddress);
+		}
+			
+		private void showCurrentlySelectedCustomerBankAccountsInTable() {
+			ArrayList<BankAccount> allBankAccounts = getCurrentCustomerBankAccountsList();
+			String[][] allBankAccountsArray = Converter.convertBankAccountsListToTwoDimensionalArray(allBankAccounts);
+			manageWindow.setBankAccountsTableContent(allBankAccountsArray);
+		}
+		
 		private void enableChangeAndDeleteCustomerButtonAfterRowSelection() {
 			if(manageWindow.isAnyRowInCustomersTableSelected()) {
 				manageWindow.setChangeCustomerButtonEnabled(true);
@@ -282,20 +348,6 @@ public class ManageWindowManager {
 				manageWindow.setChangeCustomerButtonEnabled(false);
 				manageWindow.setDeleteCustomerButtonEnabler(false);
 			}
-		}
-			
-		private void showCurrentlySelectedCustomerAddressInTable() {
-			Customer customer = customerManager.findById(currentlySelectedCustomer.getUserId());
-			
-			String[] currentlySelectedCustomerAddress = Converter.convertCustomerAddressToStringArray(
-					customer.getAddress());
-			manageWindow.setAddressTableContent(currentlySelectedCustomerAddress);
-		}
-			
-		private void showCurrentlySelectedCustomerBankAccountsInTable() {
-			ArrayList<BankAccount> allBankAccounts = getCurrentCustomerBankAccountsList();
-			String[][] allBankAccountsArray = Converter.convertBankAccountsListToTwoDimensionalArray(allBankAccounts);
-			manageWindow.setBankAccountsTableContent(allBankAccountsArray);
 		}
 
 		private ArrayList<BankAccount> getCurrentCustomerBankAccountsList() {
