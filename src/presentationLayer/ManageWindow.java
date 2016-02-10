@@ -137,6 +137,10 @@ public class ManageWindow {
 		}
 	}
 	
+	public void addToBankAccountsTable(String[] convertBankAccountToArray) {
+		bankAccountsTableModel.addRow(convertBankAccountToArray);
+	}
+	
 	public boolean isAddressTableEmpty() {
 		return isTableEmpty(addressesTableModel);
 	}
@@ -190,6 +194,10 @@ public class ManageWindow {
 		changeBankAccountButton.setEnabled(false);
 		deleteBankAccountButton.setEnabled(false);
 		
+	}
+	
+	public void addAddBankAccountButtonListener(ActionListener actionListener) {
+		addBankAccountButton.addActionListener(actionListener);
 	}
 	
 	private void initializeFrame() {

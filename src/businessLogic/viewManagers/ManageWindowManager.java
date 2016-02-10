@@ -36,6 +36,9 @@ public class ManageWindowManager {
 	private AddressInformationWindowManager changeAddressInformationWindowManager = 
 			new AddressInformationWindowManager();
 	
+	private BankAccountInformationWindowManager addBankAccountInformationWindowManager = 
+			new BankAccountInformationWindowManager();
+	
 	private LoginInformation loginInformation;
 	
 	private Customer currentlySelectedCustomer;
@@ -69,14 +72,24 @@ public class ManageWindowManager {
 	}
 	
 	private void defineComponentsActions() {
+		defineMainWindowComponentsActions();
+		defineInformationWindowsComponentsActions();
+	}
+	
+	private void defineMainWindowComponentsActions() {
 		defineFrameExitButtonAction();
 		defineCustomerButtonsActions();
 		defineCustomersTableSelectAction();
-		defineAddressTableButtonsActions();
-		defineCustomerInformationWindowButtonsActions();
-		defineAddressInformationWindowButtonsActions();
+		defineAddressButtonsActions();
+		defineBankAccountButtonsActions();
 	}
 	
+	private void defineInformationWindowsComponentsActions() {
+		defineCustomerInformationWindowButtonsActions();
+		defineAddressInformationWindowButtonsActions();
+		defineBankAccountInformationWindowButtonsActions();
+	}
+
 	private void defineCustomerButtonsActions() {
 		defineAddCustomerButtonAction();
 		defineChangeCustomerButtonAction();
@@ -93,7 +106,7 @@ public class ManageWindowManager {
 		defineChangeAddressInformationWindowAcceptButtonAction();
 	}
 
-	private void defineAddressTableButtonsActions() {
+	private void defineAddressButtonsActions() {
 		defineAddressAddButtonAction();
 		definceAddressChangeButtonAction();
 		defineAddressDeleteButtonAction();
@@ -396,5 +409,48 @@ public class ManageWindowManager {
 		manageWindow.setChangeAddressButtonEnabled(true);
 		manageWindow.setDeleteAddressButtonEnabled(true);
 	}
+	
+	private void defineBankAccountButtonsActions() {
+		defineAddBankAccountButtonAction();
+	}
+	
+	private void defineAddBankAccountButtonAction() {
+		manageWindow.addAddBankAccountButtonListener(new ActionListener() {
 
+			public void actionPerformed(ActionEvent arg0) {
+				addBankAccountInformationWindowManager.show();
+			}
+			
+		});
+	}
+	
+	private void defineBankAccountInformationWindowButtonsActions() {
+		defineAddBankAccountInformationWindowAcceptButton();
+		
+	}
+	
+	private void defineAddBankAccountInformationWindowAcceptButton() {
+		addBankAccountInformationWindowManager.defineAcceptButtonAction(new ActionListener() {
+
+			private BankAccount bankAccount;
+			
+			public void actionPerformed(ActionEvent e) {
+				bankAccount = addBankAccountInformationWindowManager.getBankAccount();
+				
+				if(bankAccount != null) {
+					try {
+						bankAccountManager.create(bankAccount.getAccountNumber(), 
+								bankAccount.getBalance(), currentlySelectedCustomer.getUserId());
+						manageWindow.addToBankAccountsTable(Converter.convertBankAccountToArray(bankAccount));
+						addBankAccountInformationWindowManager.clearAndClose();
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(addBankAccountInformationWindowManager.getFrame(), 
+								"Account with this number already exists. Please choose another one.");
+					}
+				}
+			}
+			
+		});
+	}
+	
 }

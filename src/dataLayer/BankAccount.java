@@ -6,9 +6,13 @@ public class BankAccount {
 	private long balance;
 	private long ownerId;
 	
-	public BankAccount(long accountNumberRef, long balanceRef, long ownerIdRef) {
+	public BankAccount(long accountNumberRef, long balanceRef) {
 		accountNumber = accountNumberRef;
 		balance = balanceRef;
+	}
+	
+	public BankAccount(long accountNumberRef, long balanceRef, long ownerIdRef) {
+		this(accountNumberRef, balanceRef);
 		ownerId = ownerIdRef;
 	}
 	

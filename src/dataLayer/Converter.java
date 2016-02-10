@@ -41,13 +41,13 @@ public class Converter {
 			ArrayList<BankAccount> allBankAccounts) {
 		String[][] allBankAccountsArray = new String[allBankAccounts.size()][];
 		for(int bankAccountIndex = 0; bankAccountIndex < allBankAccounts.size(); bankAccountIndex++) {
-			allBankAccountsArray[bankAccountIndex] = convertSingleBankAccountToArray(
+			allBankAccountsArray[bankAccountIndex] = convertBankAccountToArray(
 					allBankAccounts.get(bankAccountIndex));
 		}
 		return allBankAccountsArray;
 	}
 
-	private static String[] convertSingleBankAccountToArray(BankAccount bankAccount) {
+	public static String[] convertBankAccountToArray(BankAccount bankAccount) {
 		return new String[] {
 				String.valueOf(bankAccount.getAccountNumber()), 
 				String.valueOf(bankAccount.getBalance())

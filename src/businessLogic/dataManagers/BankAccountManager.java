@@ -16,7 +16,7 @@ public class BankAccountManager {
 		bankAccountDao.connect(loginInformation);
 	}
 
-	public void create(long accountNumber, int startingBalance, long userId) {
+	public void create(long accountNumber, long startingBalance, long userId) throws SQLException {
 		BankAccount bankAccount = new BankAccount(accountNumber, startingBalance, userId);
 		bankAccountDao.create(bankAccount, userId);
 	}

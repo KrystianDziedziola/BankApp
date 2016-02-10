@@ -9,15 +9,10 @@ import dataLayer.BankAccount;
 
 public class BankAccountMySqlDao extends MySqlDao implements BankAccountDaoInterface {
 	
-	public void create(BankAccount bankAccount, long userId) {
-		try {
+	public void create(BankAccount bankAccount, long userId) throws SQLException {
 			preparedStatement = connection.prepareStatement(
 					"INSERT INTO "+ databaseName + ".bank_accounts VALUES (?, ?, ?)");
 			setBankAccountInfo(bankAccount, preparedStatement);		
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
 	}
 
 	public BankAccount find(long accountNumber) {
