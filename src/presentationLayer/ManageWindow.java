@@ -189,10 +189,10 @@ public class ManageWindow {
 		deleteBankAccountButton.setEnabled(isEnabled);
 	}
 	
-	public void disableAllBankAccountButtons() {
-		addBankAccountButton.setEnabled(false);
-		changeBankAccountButton.setEnabled(false);
-		deleteBankAccountButton.setEnabled(false);
+	public void setAllBankAccountButtonsEnabled(Boolean isEnabled) {
+		addBankAccountButton.setEnabled(isEnabled);
+		changeBankAccountButton.setEnabled(isEnabled);
+		deleteBankAccountButton.setEnabled(isEnabled);
 		
 	}
 	

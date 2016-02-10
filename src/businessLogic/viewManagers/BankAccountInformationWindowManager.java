@@ -4,8 +4,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
-
 import dataLayer.BankAccount;
 import presentationLayer.BankAccountInformationWindow;
 
@@ -42,22 +40,12 @@ public class BankAccountInformationWindowManager {
 		bankAccountInformationWindow.addAcceptButtonActionListener(actionListener);
 	}
 
-	public BankAccount getBankAccount() {
-		try {
-			Long accountNumber = Long.parseLong(bankAccountInformationWindow.getAccountNumber());
-			Long balance = Long.parseLong(bankAccountInformationWindow.getBalance());
-			return new BankAccount(accountNumber, balance);
-		} catch(NumberFormatException e) {
-			showWrongInputWindow();
-			return null;
-		}
-		
+	public BankAccount getBankAccount() throws NumberFormatException{
+		Long accountNumber = Long.parseLong(bankAccountInformationWindow.getAccountNumber());
+		Long balance = Long.parseLong(bankAccountInformationWindow.getBalance());
+		return new BankAccount(accountNumber, balance);
 	}
 
-	private void showWrongInputWindow() {
-		String message = "Both values have to be a number.";
-		JOptionPane.showMessageDialog(bankAccountInformationWindow.getFrame(), message);
-	}
 	
 	private void defineCancelButtonAction() {
 		bankAccountInformationWindow.addCancelButtonActionListener(new ActionListener() {

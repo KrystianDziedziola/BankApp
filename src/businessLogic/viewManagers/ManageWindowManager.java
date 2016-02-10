@@ -336,7 +336,7 @@ public class ManageWindowManager {
 				showCurrentlySelectedCustomerBankAccountsInTable();
 				enableChangeAndDeleteCustomerButtonAfterRowSelection();
 				enableAppropriateAddressButtons();
-				enableAppropriateBankAccountsButtons();
+				enableOnlyAddBankAccountButton();
 			}
 		}
 		
@@ -380,14 +380,6 @@ public class ManageWindowManager {
 			enableOnlyAddAddressButton();
 		} else {
 			enableOnlyChangeAndDeleteAddressButtons();
-		}
-	}
-	
-	private void enableAppropriateBankAccountsButtons() {
-		if(manageWindow.isBankAccountsTableEmpty()) {
-			enableOnlyAddBankAccountButton();
-		} else {
-			manageWindow.disableAllBankAccountButtons();
 		}
 	}
 	
@@ -435,18 +427,18 @@ public class ManageWindowManager {
 			private BankAccount bankAccount;
 			
 			public void actionPerformed(ActionEvent e) {
-				bankAccount = addBankAccountInformationWindowManager.getBankAccount();
-				
-				if(bankAccount != null) {
-					try {
-						bankAccountManager.create(bankAccount.getAccountNumber(), 
-								bankAccount.getBalance(), currentlySelectedCustomer.getUserId());
-						manageWindow.addToBankAccountsTable(Converter.convertBankAccountToArray(bankAccount));
-						addBankAccountInformationWindowManager.clearAndClose();
-					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(addBankAccountInformationWindowManager.getFrame(), 
-								"Account with this number already exists. Please choose another one.");
-					}
+				try {
+					bankAccount = addBankAccountInformationWindowManager.getBankAccount();
+					bankAccountManager.create(bankAccount.getAccountNumber(), 
+							bankAccount.getBalance(), currentlySelectedCustomer.getUserId());
+					manageWindow.addToBankAccountsTable(Converter.convertBankAccountToArray(bankAccount));
+					addBankAccountInformationWindowManager.clearAndClose();
+				} catch(NumberFormatException e1) {
+					JOptionPane.showMessageDialog(addBankAccountInformationWindowManager.getFrame(),
+							"Both values have to be a number.");
+				} catch (SQLException e1) {
+					JOptionPane.showMessageDialog(addBankAccountInformationWindowManager.getFrame(), 
+							"Account with this number already exists. Please choose another one.");
 				}
 			}
 			
