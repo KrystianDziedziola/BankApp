@@ -93,15 +93,20 @@ public class ManageWindow {
 	}
 	
 	public ArrayList<String> getCustomersTableSelectedRow() {
-		ArrayList<String> customerInfo = new ArrayList<String>();
-		int selectedRowIndex = customersTable.getSelectedRow();
-		int numberOfColumns = customersTableModel.getColumnCount();
+		return getSelectedRowFromTable(customersTable);
+	}
+	
+	private ArrayList<String> getSelectedRowFromTable(JTable table) {
+		ArrayList<String> row = new ArrayList<String>();
+		int selectedRowIndex = table.getSelectedRow();
+		int numberOfColumns = table.getModel().getColumnCount();
 		
 		for(int columnId = 0; columnId < numberOfColumns; columnId++) {
-			customerInfo.add((String) customersTable.getValueAt(selectedRowIndex, columnId));
+			row.add((String) table.getValueAt(selectedRowIndex, columnId));
 		}
-		return customerInfo;
-	}
+		
+		return row;
+	}	
 	
 	public void setChangeCustomerButtonEnabled(boolean isEnabled) {
 		changeCustomerButton.setEnabled(isEnabled);
@@ -198,6 +203,18 @@ public class ManageWindow {
 	
 	public void addAddBankAccountButtonListener(ActionListener actionListener) {
 		addBankAccountButton.addActionListener(actionListener);
+	}
+	
+	public void addBankAccountsTableSelectionListener(ListSelectionListener listSelectionListener) {
+		bankAccountsTable.getSelectionModel().addListSelectionListener(listSelectionListener);
+	}
+	
+	public void addDeleteBankAccountButtonListener(ActionListener actionListener) {
+		deleteBankAccountButton.addActionListener(actionListener);
+	}
+	
+	public ArrayList<String> getBankAccountsTableSelectedRow() {
+		return getSelectedRowFromTable(bankAccountsTable);
 	}
 	
 	private void initializeFrame() {

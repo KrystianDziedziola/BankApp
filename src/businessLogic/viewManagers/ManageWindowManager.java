@@ -42,6 +42,7 @@ public class ManageWindowManager {
 	private LoginInformation loginInformation;
 	
 	private Customer currentlySelectedCustomer;
+	private BankAccount currentlySelectedBankAccount;
 	
 	public ManageWindowManager(LoginInformation loginInformation) {
 		this.loginInformation = loginInformation;
@@ -82,6 +83,7 @@ public class ManageWindowManager {
 		defineCustomersTableSelectAction();
 		defineAddressButtonsActions();
 		defineBankAccountButtonsActions();
+		defineBankAccountsTableSelectAction();
 	}
 	
 	private void defineInformationWindowsComponentsActions() {
@@ -346,19 +348,11 @@ public class ManageWindowManager {
 		}
 
 		private void showCurrentlySelectedCustomerAddressInTable() {
-			
-			
 			String[] currentlySelectedCustomerAddress = Converter.convertCustomerAddressToStringArray(
 					currentlySelectedCustomer.getAddress());
 			manageWindow.setAddressTableContent(currentlySelectedCustomerAddress);
 		}
 			
-		private void showCurrentlySelectedCustomerBankAccountsInTable() {
-			ArrayList<BankAccount> allBankAccounts = getCurrentCustomerBankAccountsList();
-			String[][] allBankAccountsArray = Converter.convertBankAccountsListToTwoDimensionalArray(allBankAccounts);
-			manageWindow.setBankAccountsTableContent(allBankAccountsArray);
-		}
-		
 		private void enableChangeAndDeleteCustomerButtonAfterRowSelection() {
 			if(manageWindow.isAnyRowInCustomersTableSelected()) {
 				manageWindow.setChangeCustomerButtonEnabled(true);
@@ -368,11 +362,17 @@ public class ManageWindowManager {
 				manageWindow.setDeleteCustomerButtonEnabler(false);
 			}
 		}
-
-		private ArrayList<BankAccount> getCurrentCustomerBankAccountsList() {
-			return bankAccountManager.getCustomerAllBankAccounts(currentlySelectedCustomer.getUserId());
-		}
 			
+	}
+	
+	private void showCurrentlySelectedCustomerBankAccountsInTable() {
+		ArrayList<BankAccount> allBankAccounts = getCurrentCustomerBankAccountsList();
+		String[][] allBankAccountsArray = Converter.convertBankAccountsListToTwoDimensionalArray(allBankAccounts);
+		manageWindow.setBankAccountsTableContent(allBankAccountsArray);
+	}
+	
+	private ArrayList<BankAccount> getCurrentCustomerBankAccountsList() {
+		return bankAccountManager.getCustomerAllBankAccounts(currentlySelectedCustomer.getUserId());
 	}
 	
 	private void enableAppropriateAddressButtons() {
@@ -404,6 +404,7 @@ public class ManageWindowManager {
 	
 	private void defineBankAccountButtonsActions() {
 		defineAddBankAccountButtonAction();
+		defineDeleteBankAccountButtonAction();
 	}
 	
 	private void defineAddBankAccountButtonAction() {
@@ -416,9 +417,28 @@ public class ManageWindowManager {
 		});
 	}
 	
+	private void defineDeleteBankAccountButtonAction() {
+		manageWindow.addDeleteBankAccountButtonListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				if(getAnswer() == JOptionPane.OK_OPTION) {
+					bankAccountManager.delete(currentlySelectedBankAccount.getAccountNumber());
+					showCurrentlySelectedCustomerBankAccountsInTable();
+					enableOnlyAddBankAccountButton();
+				}
+			}
+			
+			private int getAnswer() {
+				return JOptionPane.showConfirmDialog(manageWindow.getFrame(), 
+						"Are you sure that you want to delete this bank account?", 
+						"Delete", JOptionPane.YES_NO_OPTION);
+			}
+			
+		});
+	}
+	
 	private void defineBankAccountInformationWindowButtonsActions() {
 		defineAddBankAccountInformationWindowAcceptButton();
-		
 	}
 	
 	private void defineAddBankAccountInformationWindowAcceptButton() {
@@ -443,6 +463,29 @@ public class ManageWindowManager {
 			}
 			
 		});
+	}
+	
+	private void defineBankAccountsTableSelectAction() {
+		manageWindow.addBankAccountsTableSelectionListener(new ListSelectionListener() {
+			
+			public void valueChanged(ListSelectionEvent event) {
+				if(event.getValueIsAdjusting()) {
+					enableChangeAndDeleteBankAccountButtons();
+					currentlySelectedBankAccount = getSelectedBankAccount();
+				}
+			}
+
+			private BankAccount getSelectedBankAccount() {
+				return Converter.convertStringListToBankAccountObject(
+						manageWindow.getBankAccountsTableSelectedRow());
+			}
+		});
+		
+	}
+	
+	private void enableChangeAndDeleteBankAccountButtons() {
+		manageWindow.setChangeBankAccountButtonEnabled(true);
+		manageWindow.setDeleteBankAccountButtonEnabled(true);
 	}
 	
 }

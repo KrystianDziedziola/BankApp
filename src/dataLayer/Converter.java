@@ -53,4 +53,10 @@ public class Converter {
 				String.valueOf(bankAccount.getBalance())
 		};
 	}
+
+	public static BankAccount convertStringListToBankAccountObject(ArrayList<String> bankAccountsTableSelectedRow) {
+		Long accountNumber = Long.parseLong(bankAccountsTableSelectedRow.get(BankAccountInfoIndex.ACCOUNT_NUMBER));
+		Long balance = Long.parseLong(bankAccountsTableSelectedRow.get(BankAccountInfoIndex.BALANCE));
+		return new BankAccount(accountNumber, balance);
+	}
 }
