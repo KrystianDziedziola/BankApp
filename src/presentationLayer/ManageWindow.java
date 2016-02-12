@@ -217,6 +217,10 @@ public class ManageWindow {
 		return getSelectedRowFromTable(bankAccountsTable);
 	}
 	
+	public void addChangeBankAccountButtonListener(ActionListener actionListener) {
+		changeBankAccountButton.addActionListener(actionListener);
+	}
+	
 	private void initializeFrame() {
 		frame = new JFrame("Bank App - Manage");
 		frameContentPane = frame.getContentPane();

@@ -19,6 +19,10 @@ public class BankAccountInformationWindowManager {
 		bankAccountInformationWindow.show();
 	}
 	
+	public void show(BankAccount bankAccount) {
+		bankAccountInformationWindow.show(bankAccount);
+	}
+	
 	public void close() {
 		bankAccountInformationWindow.close();
 	}
@@ -36,7 +40,7 @@ public class BankAccountInformationWindowManager {
 		bankAccountInformationWindow.clear();
 	}
 
-	public void defineAcceptButtonAction(ActionListener actionListener) {
+	public void addAcceptButtonListener(ActionListener actionListener) {
 		bankAccountInformationWindow.addAcceptButtonActionListener(actionListener);
 	}
 

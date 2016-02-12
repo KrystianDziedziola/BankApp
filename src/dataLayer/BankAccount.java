@@ -43,9 +43,14 @@ public class BankAccount {
 	public long getOwnerId() {
 		return ownerId;
 	}
+	
+	public void setOwnerId(long ownerId) {
+		this.ownerId = ownerId;
+	}
 
 	public String toString() {
 		return "BankAccount [accountNumber=" + accountNumber + ", balance="
 				+ balance + "]";
 	}
+	
 }

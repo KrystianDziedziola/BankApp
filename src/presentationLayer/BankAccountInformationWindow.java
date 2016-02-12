@@ -42,6 +42,7 @@ public class BankAccountInformationWindow {
 	public void show(BankAccount bankAccount) {
 		accountNumberTextField.setText(String.valueOf(bankAccount.getAccountNumber()));
 		balanceTextField.setText(String.valueOf(bankAccount.getBalance()));
+		accountNumberTextField.setEditable(false);
 		show();
 	}
 	

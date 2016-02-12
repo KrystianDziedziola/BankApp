@@ -38,6 +38,8 @@ public class ManageWindowManager {
 	
 	private BankAccountInformationWindowManager addBankAccountInformationWindowManager = 
 			new BankAccountInformationWindowManager();
+	private BankAccountInformationWindowManager changeBankAccountInformationWindowManager = 
+			new BankAccountInformationWindowManager();
 	
 	private LoginInformation loginInformation;
 	
@@ -404,6 +406,7 @@ public class ManageWindowManager {
 	
 	private void defineBankAccountButtonsActions() {
 		defineAddBankAccountButtonAction();
+		defineChangeBankAccountButtonAction();
 		defineDeleteBankAccountButtonAction();
 	}
 	
@@ -412,6 +415,16 @@ public class ManageWindowManager {
 
 			public void actionPerformed(ActionEvent arg0) {
 				addBankAccountInformationWindowManager.show();
+			}
+			
+		});
+	}
+	
+	private void defineChangeBankAccountButtonAction() {
+		manageWindow.addChangeBankAccountButtonListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				changeBankAccountInformationWindowManager.show(currentlySelectedBankAccount);
 			}
 			
 		});
@@ -439,10 +452,11 @@ public class ManageWindowManager {
 	
 	private void defineBankAccountInformationWindowButtonsActions() {
 		defineAddBankAccountInformationWindowAcceptButton();
+		defineChangeBankAccountInformationWindowAcceptButton();
 	}
 	
 	private void defineAddBankAccountInformationWindowAcceptButton() {
-		addBankAccountInformationWindowManager.defineAcceptButtonAction(new ActionListener() {
+		addBankAccountInformationWindowManager.addAcceptButtonListener(new ActionListener() {
 
 			private BankAccount bankAccount;
 			
@@ -486,6 +500,25 @@ public class ManageWindowManager {
 	private void enableChangeAndDeleteBankAccountButtons() {
 		manageWindow.setChangeBankAccountButtonEnabled(true);
 		manageWindow.setDeleteBankAccountButtonEnabled(true);
+	}
+	
+	private void defineChangeBankAccountInformationWindowAcceptButton() {
+		changeBankAccountInformationWindowManager.addAcceptButtonListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				update();
+				changeBankAccountInformationWindowManager.clearAndClose();
+				showCurrentlySelectedCustomerBankAccountsInTable();
+				enableOnlyAddBankAccountButton();
+			}
+
+			private void update() {
+				BankAccount bankAccount = changeBankAccountInformationWindowManager.getBankAccount();
+				bankAccount.setOwnerId(currentlySelectedCustomer.getUserId());
+				bankAccountManager.update(bankAccount);
+			}
+			
+		});
 	}
 	
 }
